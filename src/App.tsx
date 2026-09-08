@@ -80,10 +80,10 @@ export default function App() {
           100% { transform: translateY(200%) translateX(-50%); opacity: 0; }
         }
         @keyframes windowFlicker { 0%,100%{opacity:0.95} 50%{opacity:0.45} 70%{opacity:1} }
-        .glow-red { text-shadow: 0 0 22px rgba(208,0,0,0.9), 0 0 44px rgba(255,106,0,0.6), 0 0 70px rgba(255,106,0,0.28); }
-        .glow-orange { box-shadow: 0 0 26px rgba(255,106,0,0.7), 0 0 60px rgba(208,0,0,0.35); }
+        .glow-red { text-shadow: 0 0 15px rgba(208,0,0,0.9), 0 0 44px rgba(255,106,0,0.6), 0 0 70px rgba(255,106,0,0.28); }
+        .glow-orange { box-shadow: 0 0 20px rgba(255,106,0,0.7), 0 0 60px rgba(208,0,0,0.35); }
         /* Scrollbar for modal */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar { width: 1px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: #FF6A00; border-radius: 10px; }
         ::-webkit-scrollbar-track { background: #0D0502; }
       `}</style>
@@ -94,18 +94,18 @@ export default function App() {
         <div
           className="fixed top-0 left-1/2 -translate-x-1/2 z-[5] pointer-events-none"
           style={{
-            width: `${flameWidth}px`,
+            width: `${flameWidth * 0.7}px`,
             height: '100vh',
             background: `linear-gradient(180deg, transparent 0%, #FFD700 12%, #FF9A00 24%, #FF6A00 42%, #8B0000 68%, #FF6A00 88%, #FFD700 100%)`,
             boxShadow: `0 0 ${flameWidth * 0.3}px rgba(255,106,0,0.9), 0 0 ${flameWidth * 0.6}px rgba(255,215,0,0.5), inset 0 0 20px rgba(253, 181, 181, 0.83)`,
-            opacity: 0.92,
+            opacity: 0.60,
             filter: 'blur(0.2px)',
             transition: 'width 0.08s linear',
           }}
         >
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute left-1/2 w-[38%] h-[45%] bg-[#FF0000] rounded-full blur-[2px]" style={{ top: '-10%', animation: 'flameFlow 1.2s linear infinite', boxShadow: '0 0 20px white, 0 0 40px #FFD700' }} />
-            <div className="absolute left-1/2 w-[22%] h-[35%] bg-[#FF0000] rounded-full blur-[1px]" style={{ top: '-10%', animation: 'flameFlow 1.8s linear infinite 0.4s', opacity: 0.8 }} />
+            <div className="absolute left-1/2 w-[28%] h-[45%] bg-[#FF0000] rounded-full blur-[2px]" style={{ top: '-10%', animation: 'flameFlow 1.2s linear infinite', boxShadow: '0 0 20px white, 0 0 40px #FFD700' }} />
+            <div className="absolute left-1/2 w-[12%] h-[35%] bg-[#FF0000] rounded-full blur-[1px]" style={{ top: '-10%', animation: 'flameFlow 1.8s linear infinite 0.4s', opacity: 0.2 }} />
           </div>
           {Array.from({ length: 15 }).map((_, i) => (
             <div key={i} className="absolute rounded-full" style={{ left: `${15 + Math.random() * 70}%`, bottom: `${(i * 7) % 90}%`, width: `${2 + (i % 3)}px`, height: `${2 + (i % 3)}px`, background: i % 2 === 0? '#FFD700' : '#FF8C00', boxShadow: `0 0 6px ${i % 2 === 0? '#FFD700' : '#FF6A00'}`, transform: `translateY(${-scrollY * (0.3 + (i % 4) * 0.15)}px)`, opacity: 0.9 }} />
@@ -135,29 +135,203 @@ export default function App() {
         })}
       </div>
 
-      {/* ===== NAVBAR ===== */}
-      <nav className="relative z-30 w-full h-[72px] px-6 md:px-10 flex items-center justify-between bg-gradient-to-b from-[#0D0502]/90 via-[#0D0502]/60 to-transparent backdrop-blur-[2px] border-b border-[#FF6A00]/10">
-        <div className="flex items-center gap-7 md:gap-8">
-          <a href="#services" className="hidden md:block text-[11px] tracking-[0.18em] font-semibold opacity-80 hover:opacity-100 hover:text-[#FFB347] transition">خدماتنا</a>
-          <a href="#works" className="hidden md:block text-[11px] tracking-[0.18em] font-semibold opacity-80 hover:opacity-100 hover:text-[#FFB347] transition">أعمالنا</a>
-          <a href="#about" className="hidden md:block text-[11px] tracking-[0.18em] font-semibold opacity-80 hover:opacity-100 hover:text-[#FFB347] transition">من نحن</a>
-          <div className="md:hidden text-[10px] tracking-[0.2em] opacity-60">W PHOENIX</div>
-        </div>
-        <div className="absolute left-1/2 -translate-x-1/2 flex items-center">
-          <img src={phoenixLogo} alt="W Phoenix Logo" className="h-[40px] w-auto object-contain drop-shadow-[0_0_18px_rgba(255,106,0,0.55)]" />
-        </div>
-        <div className="flex items-center">
-          <button
-            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-            className="h-[36px] px-5 md:px-6 rounded-[2px] bg-gradient-to-l from-[#D00000] to-[#FF6A00] text-[12px] font-bold tracking-wide glow-orange hover:brightness-110 active:scale-[0.98] transition"
-          >
-            استشارة مجانية
-          </button>
-        </div>
-      </nav>
+{/* ===== NAVBAR - REAL GLOW NO RECTANGLE + SMALL LOGO ===== */}
+<nav
+  className="
+    fixed
+    top-3
+    left-3
+    right-3
+    z-[100]
+    h-16
+    px-5 md:px-8
+    flex
+    items-center
+    justify-between
+    rounded-2xl
+    border
+    border-[#FF6A00]/20
+    bg-[#080808]/90
+    backdrop-blur-xl
+    shadow-[0_8px_35px_rgba(208,0,0,0.35),0_0_25px_rgba(255,60,0,0.12)]
+    transition-all
+    duration-500
+  "
+>
+  {/* Logo */}
+  <a
+    href="#home"
+    className="relative group flex items-center"
+  >
+    <img
+      src={phoenixLogo}
+      alt="W Phoenix"
+      className="
+        h-10
+        md:h-11
+        w-auto
+        object-contain
+        transition-all
+        duration-500
+        drop-shadow-[0_0_0px_rgba(255,106,0,0)]
+        group-hover:drop-shadow-[0_0_18px_rgba(255,106,0,0.9)]
+        group-hover:scale-105
+      "
+    />
+  </a>
+
+  {/* Navigation */}
+  <div className="hidden lg:flex items-center gap-1">
+    {[
+      { href: "#main", label: "الرئيسية" },
+      { href: "#about", label: "ما يميزنا" },
+      { href: "#services", label: "خدماتنا" },
+      { href: "#production", label: "مراحل الإنتاج" },
+      { href: "#why", label: "من نحن" },
+      { href: "#works", label: "مشاريعنا" },
+      { href: "#packages", label: "باقاتنا" },
+      { href: "#contact", label: "تواصل معنا" },
+    ].map((link) => (
+      <a
+        key={link.href}
+        href={link.href}
+        className="
+          relative
+          group
+          px-3
+          py-2
+          text-sm
+          md:text-base
+          text-white/80
+          transition-all
+          duration-500
+          hover:text-white
+        "
+      >
+        {/* Red glow behind text */}
+        <span
+          className="
+            absolute
+            inset-0
+            rounded-full
+            bg-[#FF6A00]/30
+            blur-xl
+            opacity-0
+            group-hover:opacity-100
+            transition-opacity
+            duration-500
+            pointer-events-none
+          "
+        />
+
+        <span
+          className="
+            absolute
+            inset-0
+            rounded-full
+            bg-[#FF6A00]/15
+            blur-2xl
+            opacity-0
+            group-hover:opacity-100
+            transition-opacity
+            duration-500
+            pointer-events-none
+          "
+        />
+
+        {/* Text */}
+        <span
+          className="
+            relative
+            z-10
+            transition-all
+            duration-500
+            group-hover:text-[#FFB347]
+            group-hover:[text-shadow:0_0_8px_rgba(255,106,0,0.9),0_0_18px_rgba(255,106,0,0.55)]
+          "
+        >
+          {link.label}
+        </span>
+
+        {/* Underline */}
+        <span
+          className="
+            absolute
+            bottom-0
+            left-1/2
+            -translate-x-1/2
+            w-0
+            h-[2px]
+            rounded-full
+            bg-gradient-to-r
+            from-[#FF6A00]
+            to-[#FFD700]
+            shadow-[0_0_8px_#FF6A00]
+            group-hover:w-[60%]
+            transition-all
+            duration-500
+            ease-out
+          "
+        />
+      </a>
+    ))}
+  </div>
+
+  {/* Free Consultation */}
+  <a
+    href="#contact"
+    className="
+      relative
+      group
+      flex
+      items-center
+      justify-center
+      min-h-[44px]
+      px-6
+      md:px-7
+      py-3
+      rounded-full
+      text-sm
+      md:text-base
+      font-bold
+      text-white
+      bg-gradient-to-r
+      from-[#D00000]
+      via-[#FF3D00]
+      to-[#FF6A00]
+      border
+      border-[#FF6A00]/50
+      shadow-[0_5px_20px_rgba(208,0,0,0.35)]
+      transition-all
+      duration-500
+      hover:scale-105
+      hover:shadow-[0_0_30px_rgba(255,60,0,0.75),0_8px_25px_rgba(208,0,0,0.5)]
+    "
+  >
+    {/* Button glow */}
+    <span
+      className="
+        absolute
+        inset-0
+        rounded-full
+        bg-[#FF6A00]/50
+        blur-xl
+        opacity-0
+        group-hover:opacity-100
+        transition-opacity
+        duration-500
+        -z-10
+      "
+    />
+
+    <span className="relative z-10 whitespace-nowrap">
+      استشارة مجانية
+    </span>
+  </a>
+</nav>
 
       {/* ===== HERO ===== */}
-      <section className="relative z-20 w-full overflow-hidden">
+      <section id="main" className="relative z-20 w-full overflow-hidden  pt-[72px]">
         {/* Parallax mountains */}
         <div
           className="absolute top-[0px] left-0 right-0 h-[320px] pointer-events-none opacity-50"
@@ -264,21 +438,21 @@ export default function App() {
       {/* ===== ABOUT ===== */}
       <section id="about" className="relative z-20 bg-[#0D0502]/92 border-y border-[#FF6A00]/10 px-6 md:px-[80px] py-[88px] md:py-[120px]">
         <div className="max-w-[1180px] mx-auto grid md:grid-cols-[1.15fr_0.85fr] gap-12 md:gap-16 items-start">
-          <FadeIn>
+      <FadeIn>
             <div className="flex items-center gap-3 mb-6">
               <span className="w-[40px] h-[2px] bg-[#FF6A00]" />
               <span className="text-[#FF6A00] text-[18px]">🔥</span>
             </div>
             <h2 className="text-[30px] md:text-[42px] font-extrabold leading-[1.1]">لديك فكرة<br />مركونة على الرف او لديك تطبيق قديم وغير مواكب للتقنيات الحديثة؟</h2>
-            <div className="mt-8 space-y-6 text-[14px] leading-[1.9] text-white/65">
+           <div className="mt-8 space-y-6 text-[14px] leading-[1.9] text-white/65">
               <p>كثيرٌ من رواد الأعمال عندهم فكرة قوية… لكنها تموت قبل أن تولد. مطور يختفي، تصميم معقد، تكلفة فلكية، وتطبيق بطيء لا يعمل</p>
               <p className="text-white/85 font-semibold">اتينا لنكسر الحلقة.</p>
-              <div className="pt-4 grid grid-cols-1 gap-4">
+                  <div className="pt-4 grid grid-cols-1 gap-4">
                 {[
-                  { t: "قبل الفينيق", d: "فكرة محبوسة، مطورين يختفون، تكلفة عالية، لا يوجد إطلاق للموقع." },
+               { t: "قبل الفينيق", d: "فكرة محبوسة، مطورين يختفون، تكلفة عالية، لا يوجد إطلاق للموقع." },
                   { t: "بعد الفينيق", d: "فكرة تتحول لتطبيق حي، إطلاق سريع، متابعة يومية، نمو مستمر." },
-                ].map((item) => (
-                  <div key={item.t} className="flex gap-4 p-4 rounded-[6px] border border-[#FF6A00]/15 bg-[#150800]/70">
+                   ].map((item) => (
+                  <div key={item.t} className="flex gap-4 p-4 rounded-[6px] border border-[#FF6A00]/15 bg-[#150800]/70 hover:border-[#FF6A00]/40 hover:bg-[#1F0B00]/80 hover:-translate-y-[1px] hover:shadow-[0_8px_25px_rgba(255,106,0,0.12)] transition-all duration-300">
                     <div className="w-[36px] h-[36px] shrink-0 rounded-full bg-gradient-to-br from-[#FF6A00] to-[#D00000] flex items-center justify-center text-[14px]">{item.t.includes("قبل") ? "🌑" : "🔥"}</div>
                     <div>
                       <div className="font-bold text-white text-[13px] mb-1">{item.t}</div>
@@ -349,14 +523,13 @@ export default function App() {
           </div>
         </div>
       </section>
-
       {/* ===== HOW WE WORK ===== */}
-      <section className="relative z-20 bg-[#0D0502]/92 px-6 md:px-[80px] py-[96px] md:py-[120px]">
+      <section id="production" className="relative z-20 bg-[#0D0502]/92 px-6 md:px-[80px] py-[96px] md:py-[120px]">
         <div className="max-w-[1180px] mx-auto">
           <FadeIn>
-            <h2 className="text-[26px] md:text-[34px] font-extrabold text-center">كيف نحول فكرتك لطائر فينيق؟</h2>
+             <h2 className="text-[26px] md:text-[34px] font-extrabold text-center">كيف نحول فكرتك لطائر فينيق؟</h2>
             <p className="mt-3 text-center text-[12.5px] text-white/55">4 مراحل، كل مرحلة ولادة جديدة — من الرماد إلى التحليق.</p>
-          </FadeIn>
+            </FadeIn>
           <div className="relative mt-16">
             <div className="hidden md:block absolute top-[36px] left-[8%] right-[8%] h-[2px] bg-gradient-to-r from-[#D00000] via-[#FF6A00] to-[#FFD700] opacity-40" />
             <div className="grid md:grid-cols-4 gap-8">
@@ -366,8 +539,8 @@ export default function App() {
                 { n: "03", t: "الصهر والبناء", d: "كود نظيف، سريع، قابل للتوسع. تحديث يومي، ومعاينة حية كل 48 ساعة.", time: "2-1 أشهر" },
                 { n: "04", t: "الإطلاق والتحليق", d: "نطلق، ندرب فريقك، نراقب الأداء، ونضمن أن طائرك لا يسقط أبداً.", time: "إطلاق" },
               ].map((step, i) => (
-                <FadeIn key={step.n} delay={i * 150} className="relative text-center">
-                  <div className="mx-auto w-[72px] h-[72px] rounded-full bg-[#150800] border-2 border-[#FF6A00]/40 flex items-center justify-center font-black text-[18px] text-[#FFB347] shadow-[0_0_24px_rgba(255,106,0,0.25)] relative z-10">
+                <FadeIn key={step.n} delay={i * 150} className="relative text-center group">
+                  <div className="mx-auto w-[72px] h-[72px] rounded-full bg-[#150800] border-2 border-[#FF6A00]/40 flex items-center justify-center font-black text-[18px] text-[#FFB347] shadow-[0_0_24px_rgba(255,106,0,0.25)] relative z-10 group-hover:border-[#FF6A00] group-hover:bg-[#FF6A00]/10 group-hover:scale-110 group-hover:shadow-[0_0_35px_rgba(255,106,0,0.4)] transition-all duration-300">
                     {step.n}
                     <div className="absolute inset-[-6px] rounded-full border border-[#FFD700]/20" style={{ animation: "floatLogo 3s ease-in-out infinite" }} />
                   </div>
@@ -382,7 +555,7 @@ export default function App() {
       </section>
 
       {/* ===== WHY PHOENIX ===== */}
-      <section className="relative z-20 bg-[#150800]/88 px-6 md:px-[80px] py-[96px] md:py-[110px] border-y border-[#FF6A00]/10">
+      <section id="why" className="relative z-20 bg-[#150800]/88 px-6 md:px-[80px] py-[96px] md:py-[110px] border-y border-[#FF6A00]/10">
         <div className="max-w-[1180px] mx-auto grid md:grid-cols-[0.9fr_1.1fr] gap-10 items-center">
           <FadeIn>
             <div className="relative w-[340px] h-[340px] md:w-[400px] md:h-[400px] mx-auto">
@@ -545,9 +718,24 @@ export default function App() {
               <h2 className="mt-8 text-[30px] md:text-[42px] font-black leading-[1.1] text-white">جاهز تبعث فكرتك<br />من الرماد؟</h2>
               <p className="mt-4 text-[13.5px] leading-[1.8] text-white/80 max-w-[520px] mx-auto">لا تخلي فكرتك تموت على الرف. احجز استشارتك المجانية الآن، وخلال 48 ساعة نرجع لك بخطة إطلاق كاملة — بدون التزام، بدون لف ودوران.</p>
               <div className="mt-8 flex flex-col md:flex-row gap-3 justify-center">
-                <button className="h-[48px] px-8 rounded-[4px] bg-[#0D0502] text-white font-bold text-[13px] border border-white/10 hover:bg-black transition shadow-[0_8px_30px_rgba(0,0,0,0.4)]">ابدأ مشروعك الآن 🔥 — استشارة مجانية</button>
-                <button className="h-[48px] px-8 rounded-[4px] bg-white/10 backdrop-blur border border-white/20 text-white font-semibold text-[13px] hover:bg-white/15 transition">واتساب مباشر</button>
-              </div>
+  <a
+    href="https://www.instagram.com/w_phoenix2026?utm_source=qr&igsi=czIwMWJoa2Q2cng2"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="h-[48px] px-8 rounded-[4px] bg-[#0D0502] text-white font-bold text-[13px] border border-white/10 hover:bg-black transition shadow-[0_8px_30px_rgba(0,0,0,0.4)] flex items-center justify-center"
+  >
+    ابدأ مشروعك الآن 🔥 — استشارة مجانية
+  </a>
+
+  <a
+    href="https://wa.me/qr/2JYYDILTC5PWI1"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="h-[48px] px-8 rounded-[4px] bg-white/10 backdrop-blur border border-white/20 text-white font-semibold text-[13px] hover:bg-white/15 transition flex items-center justify-center"
+  >
+    واتساب مباشر
+  </a>
+</div>
               <div className="mt-6 text-[11px] text-white/60">⏱ نرد خلال ساعتين • 🔒 سرية تامة لفكرتك • 🚀 إطلاق أول نسخة خلال 3 أسابيع</div>
             </FadeIn>
           </div>
@@ -791,7 +979,7 @@ export default function App() {
             <a href="#" className="hover:text-[#FFB347] transition">شروط الخدمة</a>
             <a href="mailto:weloze.pheonix@gamil.com" className="hover:text-[#FFB347] transition">weloze.pheonix@gamil.com</a>
           </div>
-          <div className="text-[10px] tracking-[0.18em] text-white/25">© 2026 W PHOENIX • Flame Waterfall Edition • Projects Cody + Malaz</div>
+          <div className="text-[10px] tracking-[0.18em] text-white/25">© 2026 W PHOENIX • Projects Cody + Malaz</div>
         </div>
       </footer>
     </div>
