@@ -39,7 +39,7 @@ export default function App() {
   const [flameWidth, setFlameWidth] = useState(140);
   const [flicker, setFlicker] = useState(0);
   const [selectedProject, setSelectedProject] = useState<null | "cody" | "malaz">(null);
-
+ const [mobileMenuOpen, setMobileMenuOpen] = useState(false); 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -86,6 +86,27 @@ export default function App() {
         ::-webkit-scrollbar { width: 1px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: #FF6A00; border-radius: 10px; }
         ::-webkit-scrollbar-track { background: #0D0502; }
+        @keyframes mobileMenuIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes mobileItemIn {
+  0% {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
       `}</style>
 
       {/* ===== Fixed continuous background ===== */}
@@ -135,7 +156,9 @@ export default function App() {
         })}
       </div>
 
-{/* ===== NAVBAR - REAL GLOW NO RECTANGLE + SMALL LOGO ===== */}
+
+{/* ===== RESPONSIVE NAVBAR ===== */}
+
 <nav
   className="
     fixed
@@ -143,44 +166,123 @@ export default function App() {
     left-3
     right-3
     z-[100]
-    h-16
-    px-5 md:px-8
+    min-h-16
+    px-4
+    md:px-6
+    lg:px-8
     flex
     items-center
     justify-between
     rounded-2xl
     border
     border-[#FF6A00]/20
-    bg-[#080808]/90
-    backdrop-blur-xl
+   bg-[#080808]
     shadow-[0_8px_35px_rgba(208,0,0,0.35),0_0_25px_rgba(255,60,0,0.12)]
     transition-all
     duration-500
   "
 >
-  {/* Logo */}
-  <a
-    href="#home"
-    className="relative group flex items-center"
+  {/* =====================================================
+      LOGO
+      في الهاتف: الضغط على الشعار يفتح القائمة
+      في الكمبيوتر: الشعار يرجع إلى Home
+  ===================================================== */}
+  <button
+    type="button"
+    onClick={() => {
+      if (window.innerWidth < 1024) {
+        setMobileMenuOpen((prev) => !prev);
+      } else {
+        window.location.hash = "home";
+      }
+    }}
+    className="
+      relative
+      group
+      flex
+      items-center
+      justify-center
+      shrink-0
+      outline-none
+      cursor-pointer
+    "
+    aria-label="فتح قائمة التنقل"
+    aria-expanded={mobileMenuOpen}
   >
+    {/* Logo glow */}
+    <span
+      className={`
+        absolute
+        w-16
+        h-16
+        rounded-full
+        bg-[#FF6A00]/20
+        blur-2xl
+        transition-all
+        duration-500
+        pointer-events-none
+        ${
+          mobileMenuOpen
+            ? "opacity-100 scale-125"
+            : "opacity-0 group-hover:opacity-100"
+        }
+      `}
+    />
+
     <img
       src={phoenixLogo}
       alt="W Phoenix"
-      className="
-        h-10
+      className={`
+        relative
+        z-10
+        h-9
         md:h-11
         w-auto
         object-contain
         transition-all
         duration-500
-        drop-shadow-[0_0_0px_rgba(255,106,0,0)]
-        group-hover:drop-shadow-[0_0_18px_rgba(255,106,0,0.9)]
-        group-hover:scale-105
-      "
+        ${
+          mobileMenuOpen
+            ? "scale-110 drop-shadow-[0_0_18px_rgba(255,106,0,0.9)]"
+            : "drop-shadow-[0_0_0px_rgba(255,106,0,0)] group-hover:drop-shadow-[0_0_18px_rgba(255,106,0,0.9)] group-hover:scale-105"
+        }
+      `}
     />
-  </a>
 
-  {/* Navigation */}
+    {/* Mobile menu indicator */}
+    <span
+      className={`
+        lg:hidden
+        absolute
+        -bottom-1
+        -right-1
+        z-20
+        flex
+        items-center
+        justify-center
+        w-5
+        h-5
+        rounded-full
+        bg-[#0D0502]
+        border
+        border-[#FF6A00]/50
+        shadow-[0_0_12px_rgba(255,106,0,0.45)]
+        transition-all
+        duration-300
+        ${mobileMenuOpen ? "rotate-180" : "rotate-0"}
+      `}
+    >
+      <span className="text-[11px] text-[#FFB347]">
+        {mobileMenuOpen ? "×" : "⌄"}
+      </span>
+    </span>
+  </button>
+
+
+  {/* =====================================================
+      DESKTOP NAVIGATION
+      تظهر فقط من lg وما فوق
+  ===================================================== */}
   <div className="hidden lg:flex items-center gap-1">
     {[
       { href: "#main", label: "الرئيسية" },
@@ -208,7 +310,7 @@ export default function App() {
           hover:text-white
         "
       >
-        {/* Red glow behind text */}
+        {/* Glow behind text */}
         <span
           className="
             absolute
@@ -277,13 +379,17 @@ export default function App() {
     ))}
   </div>
 
-  {/* Free Consultation */}
+
+  {/* =====================================================
+      DESKTOP CONSULTATION BUTTON
+      ===================================================== */}
   <a
     href="#contact"
     className="
+      hidden
+      lg:flex
       relative
       group
-      flex
       items-center
       justify-center
       min-h-[44px]
@@ -328,6 +434,234 @@ export default function App() {
       استشارة مجانية
     </span>
   </a>
+
+
+  {/* =====================================================
+      MOBILE DROPDOWN MENU
+      تظهر فقط على الشاشات الأصغر من lg
+  ===================================================== */}
+  {mobileMenuOpen && (
+    <>
+      {/* خلفية شفافة خلف القائمة */}
+      <div
+        onClick={() => setMobileMenuOpen(false)}
+        className="
+          fixed
+          inset-0
+          top-[84px]
+          z-[-1]
+          bg-black/30
+        "
+      />
+
+      {/* القائمة */}
+      <div
+        className="
+          lg:hidden
+          absolute
+          top-[calc(100%+10px)]
+          left-0
+          right-0
+          overflow-hidden
+          rounded-2xl
+          border
+          border-[#FF6A00]/25
+          bg-[#080808]/97
+          backdrop-blur-2xl
+          shadow-[0_20px_60px_rgba(0,0,0,0.75),0_0_35px_rgba(255,60,0,0.18)]
+          animate-[mobileMenuIn_0.3s_ease-out]
+        "
+      >
+
+        {/* Glow أعلى القائمة */}
+        <div
+          className="
+            absolute
+            top-0
+            left-1/2
+            -translate-x-1/2
+            w-[220px]
+            h-[80px]
+            bg-[#FF6A00]/10
+            blur-3xl
+            pointer-events-none
+          "
+        />
+
+        {/* خط علوي */}
+        <div
+          className="
+            absolute
+            top-0
+            left-[15%]
+            right-[15%]
+            h-[1px]
+            bg-gradient-to-r
+            from-transparent
+            via-[#FF6A00]
+            to-transparent
+            shadow-[0_0_12px_#FF6A00]
+          "
+        />
+
+        <div className="relative p-3">
+
+          {/* عنوان صغير */}
+          <div className="px-4 pt-2 pb-3 text-right">
+            <div className="text-[9px] tracking-[0.3em] text-[#FF6A00]/70">
+              W PHOENIX
+            </div>
+
+            <div className="mt-1 text-[12px] text-white/40">
+              من الفكرة إلى التحليق 🔥
+            </div>
+          </div>
+
+
+          {/* الروابط */}
+          {[
+            { href: "#main", label: "الرئيسية" },
+            { href: "#about", label: "ما يميزنا" },
+            { href: "#services", label: "خدماتنا" },
+            { href: "#production", label: "مراحل الإنتاج" },
+            { href: "#why", label: "من نحن" },
+            { href: "#works", label: "مشاريعنا" },
+            { href: "#packages", label: "باقاتنا" },
+            { href: "#contact", label: "تواصل معنا" },
+          ].map((link, index) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className="
+                group
+                relative
+                flex
+                items-center
+                justify-between
+                w-full
+                px-4
+                py-3
+                mb-1
+                rounded-xl
+                text-[13px]
+                md:text-[14px]
+                text-white/75
+                transition-all
+                duration-300
+                hover:bg-[#FF6A00]/10
+                hover:text-[#FFB347]
+              "
+              style={{
+                animation: `mobileItemIn 0.3s ease-out ${index * 45}ms both`,
+              }}
+            >
+
+              {/* خط برتقالي عند Hover */}
+              <span
+                className="
+                  absolute
+                  right-0
+                  top-1/2
+                  -translate-y-1/2
+                  w-[2px]
+                  h-0
+                  rounded-full
+                  bg-gradient-to-b
+                  from-[#FF6A00]
+                  to-[#FFD700]
+                  shadow-[0_0_12px_#FF6A00]
+                  group-hover:h-7
+                  transition-all
+                  duration-300
+                "
+              />
+
+              {/* النص */}
+              <span className="relative z-10">
+                {link.label}
+              </span>
+
+              {/* السهم */}
+              <span
+                className="
+                  text-[#FF6A00]/50
+                  group-hover:text-[#FFB347]
+                  group-hover:-translate-x-1
+                  transition-all
+                  duration-300
+                  text-[14px]
+                "
+              >
+                ←
+              </span>
+            </a>
+          ))}
+
+
+          {/* فاصل */}
+          <div
+            className="
+              my-3
+              h-[1px]
+              bg-gradient-to-r
+              from-transparent
+              via-[#FF6A00]/20
+              to-transparent
+            "
+          />
+
+
+          {/* زر الاستشارة داخل القائمة */}
+          <a
+            href="#contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="
+              relative
+              flex
+              items-center
+              justify-center
+              w-full
+              px-5
+              py-3
+              rounded-xl
+              font-bold
+              text-[13px]
+              text-white
+              bg-gradient-to-r
+              from-[#D00000]
+              via-[#FF3D00]
+              to-[#FF6A00]
+              border
+              border-[#FF6A00]/40
+              shadow-[0_5px_25px_rgba(208,0,0,0.35)]
+              hover:shadow-[0_0_30px_rgba(255,60,0,0.65)]
+              hover:scale-[1.01]
+              transition-all
+              duration-300
+            "
+          >
+            <span>
+              استشارة مجانية 🔥
+            </span>
+          </a>
+
+        </div>
+
+        {/* خط سفلي */}
+        <div
+          className="
+            h-[2px]
+            w-full
+            bg-gradient-to-r
+            from-transparent
+            via-[#FF6A00]/50
+            to-transparent
+          "
+        />
+      </div>
+    </>
+  )}
 </nav>
 
       {/* ===== HERO ===== */}
