@@ -6,6 +6,10 @@ import promoVideo from "./assets/cody-promo.mp4";
 import codyVideo from "./assets/cody.mp4";
 import malazepromoVideo from "./assets/malaze promo.mp4";
 import malazeVideo from "./assets/malaz.mp4";
+import arabescImage from "./assets/16.png";
+import japaneseAcademyImage from "./assets/17.png";
+import silkRoadImage from "./assets/20.png";
+import forSyriaSafetyImage from "./assets/8.png";
 
 // FadeIn via IntersectionObserver
 const FadeIn: React.FC<{ children: React.ReactNode; delay?: number; className?: string }> = ({ children, delay = 0, className = "" }) => {
@@ -995,6 +999,126 @@ export default function App() {
                 </div>
               </div>
             </FadeIn>
+{/* ===== ARABESC CARD ===== */}
+<FadeIn delay={260}>
+  <div
+    onClick={() => setSelectedProject("arabesc")}
+    className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
+  >
+    <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
+      <img src={arabescImage} alt="Arabesc Restaurant & Cafe" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
+      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">WordPress • WooCommerce</div>
+      <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
+    </div>
+    <div className="p-6">
+      <h3 className="font-bold text-[16px] leading-[1.3]">Arabesc Restaurant & Cafe</h3>
+      <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
+        موقع WordPress مخصص لمطعم سوري في Hachioji اليابان. يجمع بين النكهات الشرقية الأصيلة وتجربة رقمية عصرية وسهلة الاستخدام مع نظام طلبات متكامل.
+      </p>
+      <div className="mt-5 flex flex-wrap gap-2">
+        {["WordPress", "WooCommerce", "عربي/ياباني"].map((t) => (
+          <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
+        ))}
+      </div>
+      <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
+        <span className="text-[11px] text-white/50 tracking-wide">مطعم • حجز طاولات</span>
+        <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
+      </div>
+    </div>
+  </div>
+</FadeIn>
+
+{/* ===== JAPANESE ACADEMY CARD ===== */}
+<FadeIn delay={280}>
+  <div
+    onClick={() => setSelectedProject("japanese-academy")}
+    className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
+  >
+    <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
+      <img src={japaneseAcademyImage} alt="Japanese Academy" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
+      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">React • TypeScript</div>
+      <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
+    </div>
+    <div className="p-6">
+      <h3 className="font-bold text-[16px] leading-[1.3]">Japanese Academy</h3>
+      <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
+        منصة تعليمية متكاملة لتعلم اللغة اليابانية. واجهة نظيفة ومنظمة بتصميم UI/UX مدروس لتسهيل الوصول للموارد ومتابعة الدروس.
+      </p>
+      <div className="mt-5 flex flex-wrap gap-2">
+        {["React", "TypeScript", "تعليم"].map((t) => (
+          <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
+        ))}
+      </div>
+      <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
+        <span className="text-[11px] text-white/50 tracking-wide">تعليم • منصة طلاب</span>
+        <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
+      </div>
+    </div>
+  </div>
+</FadeIn>
+
+{/* ===== SILK ROAD LODGE CARD ===== */}
+<FadeIn delay={300}>
+  <div
+    onClick={() => setSelectedProject("silk-road")}
+    className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
+  >
+    <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
+      <img src={silkRoadImage} alt="Silk Road Lodge" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
+      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">Laravel • React</div>
+      <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
+    </div>
+    <div className="p-6">
+      <h3 className="font-bold text-[16px] leading-[1.3]">Silk Road Lodge</h3>
+      <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
+        منصة حجز فندقي أنيقة في قلب تدمر التاريخي. محتوى متعدد اللغات، تصميم CSS مخصص، وتدفق حجز بديهي يمزج التراث بالضيافة العصرية.
+      </p>
+      <div className="mt-5 flex flex-wrap gap-2">
+        {["Laravel", "Tailwind", "حجز"].map((t) => (
+          <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
+        ))}
+      </div>
+      <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
+        <span className="text-[11px] text-white/50 tracking-wide">فندق • Palmyra</span>
+        <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
+      </div>
+    </div>
+  </div>
+</FadeIn>
+
+{/* ===== FOR SYRIA SAFETY CARD ===== */}
+<FadeIn delay={320}>
+  <div
+    onClick={() => setSelectedProject("for-syria-safety")}
+    className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
+  >
+    <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
+      <img src={forSyriaSafetyImage} alt="For Syria Safety" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
+      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">Humanitarian • React</div>
+      <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
+    </div>
+    <div className="p-6">
+      <h3 className="font-bold text-[16px] leading-[1.3]">For Syria Safety</h3>
+      <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
+        منصة إنسانية لتوعية السوريين بمخاطر الألغام ومخلفات الحرب. تبليغ عن أماكن مشبوهة، تتبع فرق الإزالة، وموارد تثقيفية لحماية المجتمع.
+      </p>
+      <div className="mt-5 flex flex-wrap gap-2">
+        {["React", "Laravel", "إنساني"].map((t) => (
+          <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
+        ))}
+      </div>
+      <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
+        <span className="text-[11px] text-white/50 tracking-wide">توعية • سلامة مجتمع</span>
+        <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
+      </div>
+    </div>
+  </div>
+</FadeIn>
+
           </div>
 
           <FadeIn delay={360} className="mt-12 flex justify-center">
@@ -1079,16 +1203,19 @@ export default function App() {
         </div>
       </section>
 
-
-      {/* ===== PROJECT DETAILS MODAL - FULL PRESERVED DESIGN ===== */}
+{/* ===== PROJECT DETAILS MODAL - FULL PRESERVED DESIGN ===== */}
       {selectedProject && (
         <div className="fixed inset-0 z-[200] overflow-y-auto bg-[#0D0502]/95 backdrop-blur-[8px]">
           <div className="min-h-screen px-4 md:px-8 py-8">
             <div className="max-w-[1100px] mx-auto">
-              <button onClick={() => setSelectedProject(null)} className="mb-8 flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#FF6A00]/30 bg-[#0D0502]/80 hover:bg-[#FF6A00]/10 transition text-[13px] font-bold cursor-pointer">
+              <button 
+                onClick={() => setSelectedProject(null)} 
+                className="mb-8 flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#FF6A00]/30 bg-[#0D0502]/80 hover:bg-[#FF6A00]/10 transition text-[13px] font-bold cursor-pointer"
+              >
                 <span>←</span> العودة للمشاريع
               </button>
 
+              {/* ===== CODY ===== */}
               {selectedProject === "cody" && (
                 <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
                   <div className="relative">
@@ -1114,7 +1241,9 @@ export default function App() {
                   </div>
 
                   <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
-                    <h2 className="text-[18px] font-bold flex items-center gap-2"><span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" /> الفيديوهات التوضيحية</h2>
+                    <h2 className="text-[18px] font-bold flex items-center gap-2">
+                      <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" /> الفيديوهات التوضيحية
+                    </h2>
                     <p className="mt-2 text-[12.5px] text-white/50">فيديوهان يوضحان رحلة المستخدم داخل التطبيق</p>
                     <div className="mt-6 grid md:grid-cols-2 gap-5">
                       <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
@@ -1192,6 +1321,7 @@ export default function App() {
                 </div>
               )}
 
+              {/* ===== MALAZ ===== */}
               {selectedProject === "malaz" && (
                 <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
                   <div className="relative">
@@ -1216,39 +1346,32 @@ export default function App() {
                     </div>
                   </div>
 
-             <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
-  <h2 className="text- font-bold flex items-center gap-2">
-    <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" />
-    الفيديو التوضيحي
-  </h2>
-
-  {/* نفس العرض تماماً - grid-cols-2 */}
-  <div className="mt-6 grid md:grid-cols-2 gap-5">
-
-    {/* الفيديو 1 */}
-    <div className="rounded- overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
-      <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
-        <span className="text- font-bold">عرض ملاذ — تجربة المستخدم</span>
-        <span className="text- text-white/40">DEMO 1</span>
-      </div>
-      <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={malazImage}>
-        <source src={malazepromoVideo} type="video/mp4" />
-      </video>
-    </div>
-
-    {/* الفيديو 2 - نفس العرض */}
-    <div className="rounded- overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
-      <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
-        <span className="text- font-bold">شرح واجهات ملاذ</span>
-        <span className="text- text-white/40">DEMO 2</span>
-      </div>
-      <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={malazeVideo}>
-        <source src={malazeVideo} type="video/mp4" />
-      </video>
-    </div>
-
-  </div>
-</div>
+                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
+                    <h2 className="text-[18px] font-bold flex items-center gap-2">
+                      <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" />
+                      الفيديو التوضيحي
+                    </h2>
+                    <div className="mt-6 grid md:grid-cols-2 gap-5">
+                      <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
+                        <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
+                          <span className="text-[12px] font-bold">عرض ملاذ — تجربة المستخدم</span>
+                          <span className="text-[10px] text-white/40">DEMO 1</span>
+                        </div>
+                        <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={malazImage}>
+                          <source src={malazepromoVideo} type="video/mp4" />
+                        </video>
+                      </div>
+                      <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
+                        <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
+                          <span className="text-[12px] font-bold">شرح واجهات ملاذ</span>
+                          <span className="text-[10px] text-white/40">DEMO 2</span>
+                        </div>
+                        <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={malazeVideo}>
+                          <source src={malazeVideo} type="video/mp4" />
+                        </video>
+                      </div>
+                    </div>
+                  </div>
 
                   <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
                     <div>
@@ -1280,6 +1403,239 @@ export default function App() {
                           <a href="https://github.com/LINDA-FARAJ/malaze" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] border border-[#FF6A00]/50 bg-[#0D0502]/40 hover:bg-[#FF6A00]/10 transition">
                             <span className="flex items-center gap-2 text-[13px] font-bold"><span>◍</span> عرض البوستر</span>
                             <span className="text-[10px] text-white/50">poster</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ===== ARABESC ===== */}
+              {selectedProject === "arabesc" && (
+                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+                      <div>
+                        <div className="inline-flex gap-2 mb-4">
+                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">RESTAURANT</span>
+                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">WordPress</span>
+                        </div>
+                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Arabesc Restaurant & Cafe</h1>
+                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">موقع WordPress مخصص لـ Arabesc، مطعم سوري في Hachioji، اليابان؛ مصمم ليربط النكهات الشرقية الأصيلة بتجربة رقمية عصرية وسهلة الاستخدام.</p>
+                        <div className="mt-6 flex flex-wrap gap-2">
+                          {["WordPress", "WooCommerce", "Arabic/Japanese", "Online Order"].map(t => (
+                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                        <img src={arabescImage} alt="Arabesc" className="w-full h-[320px] object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+                    <div>
+                      <h3 className="text-[16px] font-bold">مميزات الموقع</h3>
+                      <ul className="mt-5 space-y-3">
+                        {[
+                          "قائمة طعام ثنائية اللغة (ياباني/إنجليزي) مع صور احترافية.",
+                          "نظام طلبات داخلي Store Order مع سلة مشتريات.",
+                          "تصميم مستوحى من رمضان والزخرفة العربية الأصيلة.",
+                          "متجاوب بالكامل مع دعم اللغة اليابانية RTL.",
+                          "تكامل مع WooCommerce لإدارة الطلبات.",
+                          "أزرار تواصل سريع وخرائط Google.",
+                        ].map((t,i) => (
+                          <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
+                            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                            <span>{t}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="space-y-5">
+                      <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                        <div className="text-[13px] font-bold mb-3">رابط المشروع</div>
+                        <a href="https://arabesc.jp/en/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                          <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الموقع المباشر</span>
+                          <span className="text-[10px] opacity-80">LIVE</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ===== JAPANESE ACADEMY ===== */}
+              {selectedProject === "japanese-academy" && (
+                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+                      <div>
+                        <div className="inline-flex gap-2 mb-4">
+                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">EDUCATION</span>
+                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">React Platform</span>
+                        </div>
+                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Japanese Academy</h1>
+                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">منصة تعليمية شاملة لـ Japanese Academy تركز على UI/UX نظيف ومنظم لتحسين تجربة تعلم اللغة أونلاين وتسهيل وصول الطلاب للموارد.</p>
+                        <div className="mt-6 flex flex-wrap gap-2">
+                          {["React", "Zod", "React-Hook-Form", "Animate.css", "Bootstrap", "TypeScript"].map(t => (
+                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                        <img src={japaneseAcademyImage} alt="Japanese Academy" className="w-full h-[320px] object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+                    <div>
+                      <h3 className="text-[16px] font-bold">مميزات المنصة</h3>
+                      <ul className="mt-5 space-y-3">
+                        {[
+                          "لوحة مواد دراسية ومستويات دراسية منظمة.",
+                          "نظام آراء الطلاب والأسئلة الشائعة.",
+                          "واجهة عربية بالكامل مع دعم RTL.",
+                          "نماذج تسجيل دخول مع React-Hook-Form + Zod Validation.",
+                          "أنيميشن ناعم بـ Animate.css لتحسين التجربة.",
+                          "تصميم متجاوب Bootstrap مع TypeScript للأمان.",
+                        ].map((t,i) => (
+                          <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
+                            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                            <span>{t}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="space-y-5">
+                      <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                        <div className="text-[13px] font-bold mb-3">رابط المشروع</div>
+                        <a href="https://japaneseacademy.jp/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                          <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الموقع المباشر</span>
+                          <span className="text-[10px] opacity-80">LIVE</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ===== SILK ROAD ===== */}
+              {selectedProject === "silk-road" && (
+                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+                      <div>
+                        <div className="inline-flex gap-2 mb-4">
+                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">HOTEL BOOKING</span>
+                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">Laravel • React</span>
+                        </div>
+                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Silk Road Lodge</h1>
+                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">منصة حجز فندقي أنيقة في قلب تدمر التاريخي. محتوى متعدد اللغات، تصميم CSS مخصص، وتدفق حجز بديهي يمزج التراث بالضيافة العصرية. (قيد التطوير)</p>
+                        <div className="mt-6 flex flex-wrap gap-2">
+                          {["React", "i18next", "Tailwind CSS", "Laravel", "React-Query"].map(t => (
+                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                        <img src={silkRoadImage} alt="Silk Road Lodge" className="w-full h-[320px] object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+                    <div>
+                      <h3 className="text-[16px] font-bold">مميزات المنصة</h3>
+                      <ul className="mt-5 space-y-3">
+                        {[
+                          "نظام حجز غرف متكامل مع تقويم توفر.",
+                          "دعم تعدد اللغات i18next (EN/AR).",
+                          "تصميم تراثي يعكس روح طريق الحرير في تدمر.",
+                          "لوحة تحكم Laravel لإدارة الغرف والحجوزات.",
+                          "React-Query لإدارة البيانات وسرعة التحميل.",
+                          "تجربة حجز بثلاث خطوات بسيطة وسلسة.",
+                        ].map((t,i) => (
+                          <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
+                            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                            <span>{t}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="space-y-5">
+                      <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                        <div className="text-[13px] font-bold mb-3">رابط المشروع</div>
+                        <a href="https://silkroadlodge.com/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                          <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الموقع المباشر</span>
+                          <span className="text-[10px] opacity-80">LIVE</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ===== FOR SYRIA SAFETY ===== */}
+              {selectedProject === "for-syria-safety" && (
+                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+                      <div>
+                        <div className="inline-flex gap-2 mb-4">
+                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">HUMANITARIAN</span>
+                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">React • Laravel</span>
+                        </div>
+                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">For Syria Safety</h1>
+                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">منصة إنسانية تهدف لمساعدة السوريين عبر رفع الوعي وكشف الألغام والقنابل غير المنفجرة. تبليغ، تتبع، وموارد تعليمية لسلامة المجتمع.</p>
+                        <div className="mt-6 flex flex-wrap gap-2">
+                          {["React", "Laravel", "Redux Toolkit", "TypeScript"].map(t => (
+                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                        <img src={forSyriaSafetyImage} alt="For Syria Safety" className="w-full h-[320px] object-cover" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
+                    <h2 className="text-[18px] font-bold flex items-center gap-2">
+                      <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" /> الفيديو التوضيحي
+                    </h2>
+                    <div className="mt-6 grid md:grid-cols-2 gap-5">
+                      <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
+                        <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
+                          <span className="text-[12px] font-bold">عرض المنصة — فيديو توضيحي</span>
+                          <span className="text-[10px] text-white/40">DEMO</span>
+                        </div>
+                        <iframe className="w-full aspect-video bg-black" src="https://www.youtube.com/embed/izCklNw_P4I" title="For Syria Safety Demo" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                      </div>
+                      <div className="rounded-[14px] border border-[#FF6A00]/15 bg-[#140804]/80 p-5 flex flex-col justify-center">
+                        <div className="text-[11px] tracking-widest text-white/40">KEY FEATURES</div>
+                        <ul className="mt-3 space-y-2">
+                          {[
+                            "تبليغ عن ألغام مشبوهة مع موقع GPS وصور.",
+                            "تتبع فرق الإزالة وحالة المناطق.",
+                            "موارد تعليمية لسلامة الأطفال والمجتمع.",
+                            "لوحة تحكم للمسؤولين والمتطوعين.",
+                          ].map((t,i) => (
+                            <li key={i} className="flex gap-2 text-[12.5px] text-white/70"><span className="text-[#FF6A00]">✓</span>{t}</li>
+                          ))}
+                        </ul>
+                        <div className="mt-6 space-y-3">
+                          <a href="https://github.com/SaraAlsukary/for-syria-" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                            <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الكود على GitHub</span>
+                            <span className="text-[10px] opacity-80">for-syria</span>
+                          </a>
+                          <a href="https://youtu.be/izCklNw_P4I?si=L29W9PrPnFxevCGAsafety" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] border border-[#FF6A00]/50 bg-[#0D0502]/40 hover:bg-[#FF6A00]/10 transition">
+                            <span className="flex items-center gap-2 text-[13px] font-bold">◍ مشاهدة على يوتيوب</span>
+                            <span className="text-[10px] text-white/50">YouTube</span>
                           </a>
                         </div>
                       </div>
