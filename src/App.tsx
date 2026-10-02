@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { BrowserRouter, Routes, Route, useNavigate, useParams, useLocation } from "react-router-dom";
+import { EffectCoverflow, Navigation, Pagination, Autoplay } from 'swiper/modules';
 import phoenixLogo from "./assets/w_phoenix_transparent.png";
 import codyImage from "./assets/cody.jpg";
 import malazImage from "./assets/malaz.jpg";
@@ -10,6 +13,13 @@ import arabescImage from "./assets/16.png";
 import japaneseAcademyImage from "./assets/17.png";
 import silkRoadImage from "./assets/20.png";
 import forSyriaSafetyImage from "./assets/8.png";
+import fashionImage from "./assets/fashon.jpg";
+import bannanImage from "./assets/bannan.jpg";
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
 
 // FadeIn via IntersectionObserver
 const FadeIn: React.FC<{ children: React.ReactNode; delay?: number; className?: string }> = ({ children, delay = 0, className = "" }) => {
@@ -37,21 +47,676 @@ const FadeIn: React.FC<{ children: React.ReactNode; delay?: number; className?: 
     </div>
   );
 };
+const projects = [
+  {
+      
+    id: "fashion-one",
+    title: "Fashion One | منصة الموضة",
+    desc: "منصة سوق إلكتروني حديثة تُعيد تعريف تجربة تسوق الأزياء من خلال الربط بين المبدعين والمصممين المستقلين والمتاجر المميزة في مساحة واحدة.",
+    image: fashionImage,
+    tag: "E-commerce • Next.js",
+    tech: ["Next.js", "Tailwind", "Vercel"],
+    meta: "متعدد البائعين • Responsive",
+  },
+  {
+    id: "bannan",
+    title: "Banaan - متجر الحقائب التعليمية",
+    desc: "متجر إلكتروني مبتكر متخصص في إحياء الفنون اليدوية من خلال تقديم حقائب تعليمية متكاملة DIY Craft Kits مع فيديو تعليمي.",
+    image: bannanImage,
+    tag: "E-commerce • DIY Kits",
+    tech: ["React", "Tailwind", "فيديو تعليمي"],
+    meta: "توصيل شامل • دفع آمن",
+  },{
+    id: "cody",
+    title: "Cody - المساعد الذكي",
+    desc: "تطبيق ذكاء اصطناعي بشخصية روبوت لطيف، يساعد المستخدمين بذكاء وتفاعل. واجهة عصرية، ردود فورية، وتجربة لا تُنسى.",
+    image: codyImage,
+    tag: "AI • Flutter",
+    tech: ["Flutter", "AI", "UI/UX"],
+    meta: "21 يوم • +5k مستخدم",
+  },
+  {
+    id: "malaz",
+    title: "ملاذ - دليل الأماكن",
+    desc: "تطبيق سياحي متكامل لاكتشاف المطاعم، الحدائق، والمعالم. خرائط تفاعلية، حجز فوري، وتجربة مستخدم سلسة.",
+    image: malazImage,
+    tag: "Maps • حجز",
+    tech: ["Flutter", "Maps", "حجز"],
+    meta: "+10k تحميل • 4.8 ⭐",
+  },
+  {
+    id: "arabesc",
+    title: "Arabesc Restaurant & Cafe",
+    desc: "موقع WordPress مخصص لمطعم سوري في Hachioji اليابان. يجمع بين النكهات الشرقية الأصيلة وتجربة رقمية عصرية.",
+    image: arabescImage,
+    tag: "WordPress • WooCommerce",
+    tech: ["WordPress", "WooCommerce", "عربي/ياباني"],
+    meta: "مطعم • حجز طاولات",
+  },
+  {
+    id: "japanese-academy",
+    title: "Japanese Academy",
+    desc: "منصة تعليمية متكاملة لتعلم اللغة اليابانية. واجهة نظيفة ومنظمة بتصميم UI/UX مدروس.",
+    image: japaneseAcademyImage,
+    tag: "React • TypeScript",
+    tech: ["React", "TypeScript", "تعليم"],
+    meta: "تعليم • منصة طلاب",
+  },
+  {
+    id: "silk-road",
+    title: "Silk Road Lodge",
+    desc: "منصة حجز فندقي أنيقة في قلب تدمر التاريخي. محتوى متعدد اللغات وتصميم يمزج التراث بالضيافة العصرية.",
+    image: silkRoadImage,
+    tag: "Laravel • React",
+    tech: ["Laravel", "Tailwind", "حجز"],
+    meta: "فندق • Palmyra",
+  },
+  {
+    id: "for-syria-safety",
+    title: "For Syria Safety",
+    desc: "منصة إنسانية لتوعية السوريين بمخاطر الألغام ومخلفات الحرب. تبليغ عن أماكن مشبوهة وموارد تثقيفية.",
+    image: forSyriaSafetyImage,
+    tag: "Humanitarian • React",
+    tech: ["React", "Laravel", "إنساني"],
+    meta: "توعية • سلامة مجتمع",
+  },
+];
+function ProjectPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const project = projects.find(p => p.id === id);
+  useEffect(() => window.scrollTo(0, 0), []);
+  if (!project) return null;
+  return (
+    <div className="min-h-screen bg-[#0D0502] text-white p-8">
+      <button
+        onClick={() => {
+          navigate("/", {
+            state: {
+              scrollTo: "works",
+            },
+          });
+        }}
+        className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#FF6A00]/20 bg-white/[0.03] text-sm text-white/70 hover:text-white hover:border-[#FF6A00]/50 hover:bg-[#FF6A00]/10 transition"
+      >
+        <span className="group-hover:-translate-x-1 transition">
+          →
+        </span>
 
-export default function App() {
+        العودة للمشاريع
+      </button>
+      <h1 className="mt-8 text-3xl font-bold">{project.title}</h1>
+
+      {/* ===== PROJECT DETAILS MODAL - FULL PRESERVED DESIGN ===== */}
+      {/* ===== FASHION ONE ===== */}
+      {id === "fashion-one" && (
+        <div className="rounded- border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+            <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+              <div>
+                <div className="inline-flex gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text- font-bold">E-COMMERCE</span>
+                  <span className="px-3 py-1 rounded-full bg-[#FF6A00] text- font-bold">Multi-Vendor</span>
+                </div>
+                <h1 className="text- md:text- font-[800] leading-[1.1]">Fashion One | منصة الموضة والأزياء المتكاملة</h1>
+                <p className="mt-4 text- md:text- text-white/60 leading-[1.9]">منصة سوق إلكتروني حديثة تُعيد تعريف تجربة تسوق الأزياء من خلال الربط بين المبدعين والمصممين المستقلين والمتاجر المميزة في مساحة واحدة. تجربة استكشاف فريدة لاقتناء أحدث الصيحات والقطع الحصرية.</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["React.js", "Next.js", "Tailwind CSS", "Vercel", "Responsive", "Minimalist Design"].map(t => (
+                    <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-">{t}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded- overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                <img src={fashionImage} alt="Fashion One" className="w-full h- object-cover" />
+              </div>
+            </div>
+          </div>
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+            <div>
+              <h3 className="text- font-bold">أبرز المميزات</h3>
+              <ul className="mt-5 space-y-3">
+                {[
+                  "واجهة تسوق متعددة البائعين: تصفح واستكشاف المتاجر والمبدعين بحرية وسلاسة.",
+                  "تجربة مستخدم سريعة وتفاعلية UX/UI بتصميم Minimalist يركز على المحتوى البصري.",
+                  "تصنيف وتصفية ذكية: نظام بحث وفلترة يتلاءم مع الفئات المختلفة للملابس والإكسسوارات.",
+                  "استجابة كاملة للموبايل Responsive متوافق كلياً مع الشاشات والأجهزة المحمولة.",
+                  "تمكين العلامات التجارية من الوصول إلى جمهور أوسع بأسلوب عرض عصري وجذاب.",
+                ].map((t,i) => (
+                  <li key={i} className="flex gap-3 text- leading-[1.8] text-white/70">
+                    <span className="mt- w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-5">
+              <div className="rounded- border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                <div className="text- font-bold mb-3">رابط المشروع</div>
+                <a href="https://fashion-one-xi.vercel.app" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded- bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                  <span className="flex items-center gap-2 text- font-bold">↗ عرض الموقع المباشر</span>
+                  <span className="text- opacity-80">LIVE</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== BANAAN ===== */}
+      {id === "bannan" && (
+        <div className="rounded- border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+            <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+              <div>
+                <div className="inline-flex gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text- font-bold">CRAFT STORE</span>
+                  <span className="px-3 py-1 rounded-full bg-[#FF6A00] text- font-bold">DIY Kits</span>
+                </div>
+                <h1 className="text- md:text- font-[800] leading-[1.1]">Banaan | متجر الحقائب التعليمية</h1>
+                <p className="mt-4 text- md:text- text-white/60 leading-[1.9]">متجر إلكتروني مبتكر متخصص في إحياء الفنون اليدوية من خلال تقديم حقائب تعليمية متكاملة DIY Craft Kits. كل حقيبة تحتوي على الخامات والأدوات مع فيديو تعليمي تفاعلي خطوة بخطوة.</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["DIY Kits", "Video Tutorial", "E-commerce", "Responsive", "دفع آمن"].map(t => (
+                    <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-">{t}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded- overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                <img src={bannanImage} alt="Banaan" className="w-full h- object-cover" />
+              </div>
+            </div>
+          </div>
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+            <div>
+              <h3 className="text- font-bold">أبرز المميزات</h3>
+              <ul className="mt-5 space-y-3">
+                {[
+                  "حقائب تعليمية شاملة DIY Kits تحتوي على جميع الأدوات والخامات المطلوبة دون الحاجة لشراء مستلزمات خارجية.",
+                  "دعم بالفيديو التعليمي: ربط المنتجات بشروحات فيديو تفاعلية بأسلوب سلس وممتع.",
+                  "تجربة تسوق متكاملة وآمنة مع واجهات واضحة (الرئيسية، التصنيفات، المنتجات، من نحن).",
+                  "نظام توصيل شامل لجميع المحافظات مع دفع آمن 100%.",
+                  "تصميم عصري وجذاب UI/UX يضمن استجابة كاملة مع جميع الأجهزة.",
+                ].map((t,i) => (
+                  <li key={i} className="flex gap-3 text- leading-[1.8] text-white/70">
+                    <span className="mt- w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-5">
+              <div className="rounded- border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                <div className="text- font-bold mb-3">التقنيات المستخدمة</div>
+                <div className="flex flex-wrap gap-2">
+                  {["React.js","Next.js","Tailwind CSS","Vercel"].map(t=> <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-">{t}</span>)}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== CODY ===== */}
+      {id === "cody" && (
+        <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+            <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+              <div>
+                <div className="inline-flex gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">AI • Flutter</span>
+                  <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">تم الإطلاق في 21 يوم</span>
+                </div>
+                <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Cody — المساعد الذكي للمبرمجين</h1>
+                <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">تطبيق ذكاء اصطناعي بشخصية روبوت لطيف يساعد المطورين على بناء مشاريع كاملة عبر شات AI فقط. واجهة تفاعلية، لوحة تحكم، وإدارة مشاريع ذكية.</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Flutter", "Firebase", "AI Chat", "Dart", "Dashboard"].map(t => (
+                    <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                <img src={codyImage} alt="Cody" className="w-full h-[320px] object-cover" />
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
+            <h2 className="text-[18px] font-bold flex items-center gap-2">
+              <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" /> الفيديوهات التوضيحية
+            </h2>
+            <p className="mt-2 text-[12.5px] text-white/50">فيديوهان يوضحان رحلة المستخدم داخل التطبيق</p>
+            <div className="mt-6 grid md:grid-cols-2 gap-5">
+              <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
+                <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
+                  <span className="text-[12px] font-bold">الفيديو 1 — عرض التطبيق الكامل</span>
+                  <span className="text-[10px] text-white/40">FULL DEMO</span>
+                </div>
+                <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={codyImage}>
+                  <source src={codyVideo} type="video/mp4" />
+                </video>
+              </div>
+              <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
+                <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
+                  <span className="text-[12px] font-bold">الفيديو 2 — برومو المشروع</span>
+                  <span className="text-[10px] text-white/40">UI FLOW</span>
+                </div>
+                <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={promoVideo}>
+                  <source src={promoVideo} type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+            <div>
+              <h3 className="text-[16px] font-bold">شرح الواجهات بالتفصيل</h3>
+              <ul className="mt-5 space-y-4">
+                {[
+                  { t: "شاشة تسجيل الدخول وإنشاء حساب", d: "واجهة ترحيبية بشخصية Cody، حقول اسم وإيميل وباسوورد مع تصميم متدرج." },
+                  { t: "لوحة التحكم Dashboard", d: "عرض جميع المشاريع، نسب الإنجاز، إحصائيات، وإدارة سريعة." },
+                  { t: "قائمة المشاريع المكتملة بنجاح", d: "شبكة مشاريع مع أيقونات Cody، أسماء الصفحات، والانتقال للوحة التحكم." },
+                  { t: "عرض المشروع الخاص", d: "صفحة تعرض تفاصيل مشروعك، صفحاته، وميزاته مع إمكانية التعديل." },
+                  { t: "إضافة مشروع وميزات جديدة", d: "نماذج إدخال اسم المشروع، الوصف، اللغة، وإضافة Features بسهولة." },
+                  { t: "شات ذكاء اصطناعي لكتابة الكود", d: "كتابة صفحة كاملة، جزء محدد من الكود، تعديل الرسائل، وإضافة الكود لمشروع جديد أو قديم." },
+                ].map((item, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                    <div>
+                      <div className="text-[13px] font-bold">{item.t}</div>
+                      <div className="text-[12px] leading-[1.8] text-white/55 mt-1">{item.d}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-5">
+              <div className="rounded-[14px] border border-[#FF6A00]/15 bg-[#140804]/80 p-5">
+                <div className="text-[11px] tracking-widest text-white/40">WHAT WE OFFER</div>
+                <ul className="mt-3 space-y-2">
+                  {[
+                    "لوحة تحكم لإضافة/تعديل/حذف مشروع",
+                    "عرض جميع مشاريعك في مكان واحد",
+                    "شات AI متخصص للكود فقط",
+                    "مشاريع مفضلة تعمل عليها باستمرار",
+                  ].map((t, i) => (
+                    <li key={i} className="flex gap-2 text-[12.5px] text-white/70"><span className="text-[#FF6A00]">✓</span>{t}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                <div className="text-[13px] font-bold mb-3">الروابط الرسمية</div>
+                <div className="space-y-3">
+                  <a href="https://github.com/boshraKurdi/Cody" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                    <span className="flex items-center gap-2 text-[13px] font-bold"><span className="text-[16px]">↗</span> عرض الكود على GitHub</span>
+                    <span className="text-[10px] opacity-80">Cody</span>
+                  </a>
+                  <a href="https://linda-faraj.github.io/cody-poster" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] border border-[#FF6A00]/50 bg-[#0D0502]/40 hover:bg-[#FF6A00]/10 transition">
+                    <span className="flex items-center gap-2 text-[13px] font-bold"><span>◍</span> عرض البوستر</span>
+                    <span className="text-[10px] text-white/50">poster</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== MALAZ ===== */}
+      {id === "malaz" && (
+        <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+            <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+              <div>
+                <div className="inline-flex gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">TOURISM</span>
+                  <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">+10k تحميل</span>
+                </div>
+                <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">ملاذ — دليل الأماكن السياحية</h1>
+                <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">تطبيق سياحي متكامل لاكتشاف المطاعم، الحدائق، والأماكن السياحية. خرائط تفاعلية، تصنيفات، حجز فوري، وتجربة عربية دافئة وسريعة.</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Flutter", "Maps", "UI/UX", "Firebase", "Geolocation"].map(t => (
+                    <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                <img src={malazImage} alt="Malaz" className="w-full h-[320px] object-cover" />
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
+            <h2 className="text-[18px] font-bold flex items-center gap-2">
+              <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" />
+              الفيديو التوضيحي
+            </h2>
+            <div className="mt-6 grid md:grid-cols-2 gap-5">
+              <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
+                <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
+                  <span className="text-[12px] font-bold">عرض ملاذ — تجربة المستخدم</span>
+                  <span className="text-[10px] text-white/40">DEMO 1</span>
+                </div>
+                <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={malazImage}>
+                  <source src={malazepromoVideo} type="video/mp4" />
+                </video>
+              </div>
+              <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
+                <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
+                  <span className="text-[12px] font-bold">شرح واجهات ملاذ</span>
+                  <span className="text-[10px] text-white/40">DEMO 2</span>
+                </div>
+                <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={malazeVideo}>
+                  <source src={malazeVideo} type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+            <div>
+              <h3 className="text-[16px] font-bold">شرح الواجهات</h3>
+              <ul className="mt-5 space-y-3">
+                {[
+                  "شاشة البحث عن الأماكن — بحث سريع مع اقتراحات ذكية.",
+                  "تصنيفات (cafe, restaurant, park) — فلترة بصرية بأيقونات واضحة.",
+                  "تفاصيل المكان مع صور، وصف، ساعات العمل، وقائمة الطعام.",
+                  "خريطة تفاعلية لتحديد الموقع والاتجاهات.",
+                  "تقييمات المستخدمين وتعليقات مع صور فعلية.",
+                  "حجز سريع ومشاركة المكان مع الأصدقاء.",
+                ].map((t, i) => (
+                  <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
+                    <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-5">
+              <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                <div className="text-[13px] font-bold mb-3">الروابط الرسمية</div>
+                <div className="space-y-3">
+                  <a href="https://github.com/LINDA-FARAJ/malaze" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)]">
+                    <span className="flex items-center gap-2 text-[13px] font-bold"><span className="text-[16px]">↗</span> عرض الكود على GitHub</span>
+                    <span className="text-[10px] opacity-80">malaze</span>
+                  </a>
+                  <a href="https://github.com/LINDA-FARAJ/malaze" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] border border-[#FF6A00]/50 bg-[#0D0502]/40 hover:bg-[#FF6A00]/10 transition">
+                    <span className="flex items-center gap-2 text-[13px] font-bold"><span>◍</span> عرض البوستر</span>
+                    <span className="text-[10px] text-white/50">poster</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== ARABESC ===== */}
+      {id === "arabesc" && (
+        <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+            <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+              <div>
+                <div className="inline-flex gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">RESTAURANT</span>
+                  <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">WordPress</span>
+                </div>
+                <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Arabesc Restaurant & Cafe</h1>
+                <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">موقع WordPress مخصص لـ Arabesc، مطعم سوري في Hachioji، اليابان؛ مصمم ليربط النكهات الشرقية الأصيلة بتجربة رقمية عصرية وسهلة الاستخدام.</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["WordPress", "WooCommerce", "Arabic/Japanese", "Online Order"].map(t => (
+                    <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                <img src={arabescImage} alt="Arabesc" className="w-full h-[320px] object-cover" />
+              </div>
+            </div>
+          </div>
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+            <div>
+              <h3 className="text-[16px] font-bold">مميزات الموقع</h3>
+              <ul className="mt-5 space-y-3">
+                {[
+                  "قائمة طعام ثنائية اللغة (ياباني/إنجليزي) مع صور احترافية.",
+                  "نظام طلبات داخلي Store Order مع سلة مشتريات.",
+                  "تصميم مستوحى من رمضان والزخرفة العربية الأصيلة.",
+                  "متجاوب بالكامل مع دعم اللغة اليابانية RTL.",
+                  "تكامل مع WooCommerce لإدارة الطلبات.",
+                  "أزرار تواصل سريع وخرائط Google.",
+                ].map((t, i) => (
+                  <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
+                    <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-5">
+              <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                <div className="text-[13px] font-bold mb-3">رابط المشروع</div>
+                <a href="https://arabesc.jp/en/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                  <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الموقع المباشر</span>
+                  <span className="text-[10px] opacity-80">LIVE</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== JAPANESE ACADEMY ===== */}
+      {id === "japanese-academy" && (
+        <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+            <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+              <div>
+                <div className="inline-flex gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">EDUCATION</span>
+                  <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">React Platform</span>
+                </div>
+                <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Japanese Academy</h1>
+                <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">منصة تعليمية شاملة لـ Japanese Academy تركز على UI/UX نظيف ومنظم لتحسين تجربة تعلم اللغة أونلاين وتسهيل وصول الطلاب للموارد.</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["React", "Zod", "React-Hook-Form", "Animate.css", "Bootstrap", "TypeScript"].map(t => (
+                    <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                <img src={japaneseAcademyImage} alt="Japanese Academy" className="w-full h-[320px] object-cover" />
+              </div>
+            </div>
+          </div>
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+            <div>
+              <h3 className="text-[16px] font-bold">مميزات المنصة</h3>
+              <ul className="mt-5 space-y-3">
+                {[
+                  "لوحة مواد دراسية ومستويات دراسية منظمة.",
+                  "نظام آراء الطلاب والأسئلة الشائعة.",
+                  "واجهة عربية بالكامل مع دعم RTL.",
+                  "نماذج تسجيل دخول مع React-Hook-Form + Zod Validation.",
+                  "أنيميشن ناعم بـ Animate.css لتحسين التجربة.",
+                  "تصميم متجاوب Bootstrap مع TypeScript للأمان.",
+                ].map((t, i) => (
+                  <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
+                    <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-5">
+              <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                <div className="text-[13px] font-bold mb-3">رابط المشروع</div>
+                <a href="https://japaneseacademy.jp/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                  <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الموقع المباشر</span>
+                  <span className="text-[10px] opacity-80">LIVE</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== SILK ROAD ===== */}
+      {id === "silk-road" && (
+        <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+            <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+              <div>
+                <div className="inline-flex gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">HOTEL BOOKING</span>
+                  <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">Laravel • React</span>
+                </div>
+                <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Silk Road Lodge</h1>
+                <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">منصة حجز فندقي أنيقة في قلب تدمر التاريخي. محتوى متعدد اللغات، تصميم CSS مخصص، وتدفق حجز بديهي يمزج التراث بالضيافة العصرية. (قيد التطوير)</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["React", "i18next", "Tailwind CSS", "Laravel", "React-Query"].map(t => (
+                    <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                <img src={silkRoadImage} alt="Silk Road Lodge" className="w-full h-[320px] object-cover" />
+              </div>
+            </div>
+          </div>
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
+            <div>
+              <h3 className="text-[16px] font-bold">مميزات المنصة</h3>
+              <ul className="mt-5 space-y-3">
+                {[
+                  "نظام حجز غرف متكامل مع تقويم توفر.",
+                  "دعم تعدد اللغات i18next (EN/AR).",
+                  "تصميم تراثي يعكس روح طريق الحرير في تدمر.",
+                  "لوحة تحكم Laravel لإدارة الغرف والحجوزات.",
+                  "React-Query لإدارة البيانات وسرعة التحميل.",
+                  "تجربة حجز بثلاث خطوات بسيطة وسلسة.",
+                ].map((t, i) => (
+                  <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
+                    <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-5">
+              <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                <div className="text-[13px] font-bold mb-3">رابط المشروع</div>
+                <a href="https://silkroadlodge.com/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                  <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الموقع المباشر</span>
+                  <span className="text-[10px] opacity-80">LIVE</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== FOR SYRIA SAFETY ===== */}
+      {id === "for-syria-safety" && (
+        <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+            <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
+              <div>
+                <div className="inline-flex gap-2 mb-4">
+                  <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">HUMANITARIAN</span>
+                  <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">React • Laravel</span>
+                </div>
+                <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">For Syria Safety</h1>
+                <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">منصة إنسانية تهدف لمساعدة السوريين عبر رفع الوعي وكشف الألغام والقنابل غير المنفجرة. تبليغ، تتبع، وموارد تعليمية لسلامة المجتمع.</p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["React", "Laravel", "Redux Toolkit", "TypeScript"].map(t => (
+                    <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                <img src={forSyriaSafetyImage} alt="For Syria Safety" className="w-full h-[320px] object-cover" />
+              </div>
+            </div>
+          </div>
+
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
+            <h2 className="text-[18px] font-bold flex items-center gap-2">
+              <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" /> الفيديو التوضيحي
+            </h2>
+            <div className="mt-6 grid md:grid-cols-2 gap-5">
+              <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
+                <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
+                  <span className="text-[12px] font-bold">عرض المنصة — فيديو توضيحي</span>
+                  <span className="text-[10px] text-white/40">DEMO</span>
+                </div>
+                <iframe className="w-full aspect-video bg-black" src="https://www.youtube.com/embed/izCklNw_P4I" title="For Syria Safety Demo" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+              </div>
+              <div className="rounded-[14px] border border-[#FF6A00]/15 bg-[#140804]/80 p-5 flex flex-col justify-center">
+                <div className="text-[11px] tracking-widest text-white/40">KEY FEATURES</div>
+                <ul className="mt-3 space-y-2">
+                  {[
+                    "تبليغ عن ألغام مشبوهة مع موقع GPS وصور.",
+                    "تتبع فرق الإزالة وحالة المناطق.",
+                    "موارد تعليمية لسلامة الأطفال والمجتمع.",
+                    "لوحة تحكم للمسؤولين والمتطوعين.",
+                  ].map((t, i) => (
+                    <li key={i} className="flex gap-2 text-[12.5px] text-white/70"><span className="text-[#FF6A00]">✓</span>{t}</li>
+                  ))}
+                </ul>
+                <div className="mt-6 space-y-3">
+                  <a href="https://github.com/SaraAlsukary/for-syria-" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                    <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الكود على GitHub</span>
+                    <span className="text-[10px] opacity-80">for-syria</span>
+                  </a>
+                  <a href="https://youtu.be/izCklNw_P4I?si=L29W9PrPnFxevCGAsafety" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] border border-[#FF6A00]/50 bg-[#0D0502]/40 hover:bg-[#FF6A00]/10 transition">
+                    <span className="flex items-center gap-2 text-[13px] font-bold">◍ مشاهدة على يوتيوب</span>
+                    <span className="text-[10px] text-white/50">YouTube</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+}
+function Home() {
   const [scrollY, setScrollY] = useState(0);
   const [flameWidth, setFlameWidth] = useState(140);
   const [flicker, setFlicker] = useState(0);
-  const [selectedProject, setSelectedProject] = useState<null | "cody" | "malaz">(null);
- const [mobileMenuOpen, setMobileMenuOpen] = useState(false); 
+  const [activeSection, setActiveSection] = useState("main");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.scrollTo === "works") {
+      setTimeout(() => {
+        document.getElementById("works")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+
+        // تنظيف state حتى لا يعيد الـ scroll عند refresh
+        window.history.replaceState({}, document.title);
+      }, 100);
+    }
+  }, [location]);
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     const flickerInt = setInterval(() => setFlicker(Math.random()), 120);
-    const flameInt = setInterval(() => {
-      setFlameWidth(130 + Math.random() * 30);
-    }, 80);
+    const flameInt = setInterval(() => setFlameWidth(130 + Math.random() * 30), 80);
     return () => {
       window.removeEventListener("scroll", onScroll);
       clearInterval(flickerInt);
@@ -60,15 +725,49 @@ export default function App() {
   }, []);
 
   // Prevent body scroll when modal open
-  useEffect(() => {
-    if (selectedProject) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [selectedProject]);
 
+  useEffect(() => {
+    const sections = [
+      "main",
+      "about",
+      "services",
+      "production",
+      "why",
+      "works",
+      "packages",
+      "contact",
+    ];
+
+    const handleActiveSection = () => {
+      const triggerPoint = window.innerHeight * 0.35;
+
+      let currentSection = "main";
+
+      sections.forEach((id) => {
+        const section = document.getElementById(id);
+
+        if (!section) return;
+
+        const rect = section.getBoundingClientRect();
+
+        if (rect.top <= triggerPoint) {
+          currentSection = id;
+        }
+      });
+
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener("scroll", handleActiveSection, {
+      passive: true,
+    });
+
+    handleActiveSection();
+
+    return () => {
+      window.removeEventListener("scroll", handleActiveSection);
+    };
+  }, []);
   return (
     <div dir="rtl" lang="ar" className="relative min-h-screen bg-[#0D0502] text-white overflow-x-hidden selection:bg-[#FF6A00]/30">
       <style>{`
@@ -133,7 +832,7 @@ export default function App() {
             <div className="absolute left-1/2 w-[12%] h-[35%] bg-[#FF0000] rounded-full blur-[1px]" style={{ top: '-10%', animation: 'flameFlow 1.8s linear infinite 0.4s', opacity: 0.2 }} />
           </div>
           {Array.from({ length: 15 }).map((_, i) => (
-            <div key={i} className="absolute rounded-full" style={{ left: `${15 + Math.random() * 70}%`, bottom: `${(i * 7) % 90}%`, width: `${2 + (i % 3)}px`, height: `${2 + (i % 3)}px`, background: i % 2 === 0? '#FFD700' : '#FF8C00', boxShadow: `0 0 6px ${i % 2 === 0? '#FFD700' : '#FF6A00'}`, transform: `translateY(${-scrollY * (0.3 + (i % 4) * 0.15)}px)`, opacity: 0.9 }} />
+            <div key={i} className="absolute rounded-full" style={{ left: `${15 + Math.random() * 70}%`, bottom: `${(i * 7) % 90}%`, width: `${2 + (i % 3)}px`, height: `${2 + (i % 3)}px`, background: i % 2 === 0 ? '#FFD700' : '#FF8C00', boxShadow: `0 0 6px ${i % 2 === 0 ? '#FFD700' : '#FF6A00'}`, transform: `translateY(${-scrollY * (0.3 + (i % 4) * 0.15)}px)`, opacity: 0.9 }} />
           ))}
         </div>
 
@@ -161,10 +860,10 @@ export default function App() {
       </div>
 
 
-{/* ===== RESPONSIVE NAVBAR ===== */}
+      {/* ===== RESPONSIVE NAVBAR ===== */}
 
-<nav
-  className="
+      <nav
+        className="
     fixed
     top-3
     left-3
@@ -185,211 +884,224 @@ export default function App() {
     transition-all
     duration-500
   "
->
-  {/* =====================================================
-      LOGO
-      في الهاتف: الضغط على الشعار يفتح القائمة
-      في الكمبيوتر: الشعار يرجع إلى Home
-  ===================================================== */}
-  <button
-    type="button"
-    onClick={() => {
-      if (window.innerWidth < 1024) {
-        setMobileMenuOpen((prev) => !prev);
-      } else {
-        window.location.hash = "home";
-      }
-    }}
-    className="
-      relative
-      group
-      flex
-      items-center
-      justify-center
-      shrink-0
-      outline-none
-      cursor-pointer
+      >
+        {/* =====================================================
+    LOGO
+===================================================== */}
+
+        <a
+          href="#main"
+          onClick={() => {
+            setActiveSection("main");
+            setMobileMenuOpen(false);
+          }}
+          className="
+    relative
+    group
+    flex
+    items-center
+    justify-center
+    shrink-0
+    outline-none
+    cursor-pointer
+  "
+          aria-label="الرئيسية"
+        >
+          <span
+            className="
+      absolute
+      w-16
+      h-16
+      rounded-full
+      bg-[#FF6A00]/20
+      blur-2xl
+      transition-all
+      duration-500
+      pointer-events-none
+      opacity-0
+      group-hover:opacity-100
     "
-    aria-label="فتح قائمة التنقل"
-    aria-expanded={mobileMenuOpen}
-  >
-    {/* Logo glow */}
-    <span
-      className={`
-        absolute
-        w-16
-        h-16
-        rounded-full
-        bg-[#FF6A00]/20
-        blur-2xl
-        transition-all
-        duration-500
-        pointer-events-none
-        ${
-          mobileMenuOpen
-            ? "opacity-100 scale-125"
-            : "opacity-0 group-hover:opacity-100"
-        }
-      `}
-    />
+          />
 
-    <img
-      src={phoenixLogo}
-      alt="W Phoenix"
-      className={`
+          <img
+            src={phoenixLogo}
+            alt="W Phoenix"
+            className="
+      relative
+      z-10
+      h-9
+      md:h-11
+      w-auto
+      object-contain
+      transition-all
+      duration-500
+      drop-shadow-[0_0_0px_rgba(255,106,0,0)]
+      group-hover:drop-shadow-[0_0_18px_rgba(255,106,0,0.9)]
+      group-hover:scale-105
+    "
+          />
+        </a>
+
+
+        {/* =====================================================
+    MOBILE MENU BUTTON
+===================================================== */}
+
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
+          className="
+    lg:hidden
+    relative
+    flex
+    items-center
+    justify-center
+    w-10
+    h-10
+    rounded-xl
+    border
+    border-[#FF6A00]/30
+    bg-[#0D0502]/70
+    text-[#FFB347]
+    shadow-[0_0_15px_rgba(255,106,0,0.15)]
+    transition-all
+    duration-300
+    hover:border-[#FF6A00]
+    hover:bg-[#FF6A00]/10
+    hover:shadow-[0_0_20px_rgba(255,106,0,0.35)]
+  "
+          aria-label={mobileMenuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+          aria-expanded={mobileMenuOpen}
+        >
+          <span
+            className="
+      text-[24px]
+      leading-none
+      transition-all
+      duration-300
+    "
+          >
+            {mobileMenuOpen ? "×" : "☰"}
+          </span>
+        </button>
+
+
+        {/* =====================================================
+    DESKTOP NAVIGATION
+    تظهر فقط من lg وما فوق
+===================================================== */}
+
+        <div className="hidden lg:flex items-center gap-1">
+          {[
+            { href: "#main", label: "الرئيسية" },
+            { href: "#about", label: "ما يميزنا" },
+            { href: "#services", label: "خدماتنا" },
+            { href: "#production", label: "مراحل الإنتاج" },
+            { href: "#why", label: "من نحن" },
+            { href: "#works", label: "مشاريعنا" },
+            { href: "#packages", label: "باقاتنا" },
+            { href: "#contact", label: "تواصل معنا" },
+          ].map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => {
+                setActiveSection(link.href.replace("#", ""));
+              }}
+              className={`
         relative
-        z-10
-        h-9
-        md:h-11
-        w-auto
-        object-contain
+        group
+        px-3
+        py-2
+        text-sm
+        md:text-base
         transition-all
         duration-500
-        ${
-          mobileMenuOpen
-            ? "scale-110 drop-shadow-[0_0_18px_rgba(255,106,0,0.9)]"
-            : "drop-shadow-[0_0_0px_rgba(255,106,0,0)] group-hover:drop-shadow-[0_0_18px_rgba(255,106,0,0.9)] group-hover:scale-105"
-        }
+        ${activeSection === link.href.replace("#", "")
+                  ? "text-[#FFB347]"
+                  : "text-white/80"
+                }
       `}
-    />
+            >
+              {/* Glow behind text */}
+              <span
+                className="
+          absolute
+          inset-0
+          rounded-full
+          bg-[#FF6A00]/30
+          blur-xl
+          opacity-0
+          group-hover:opacity-100
+          transition-opacity
+          duration-500
+          pointer-events-none
+        "
+              />
 
-    {/* Mobile menu indicator */}
-    <span
-      className={`
-        lg:hidden
-        absolute
-        -bottom-1
-        -right-1
-        z-20
-        flex
-        items-center
-        justify-center
-        w-5
-        h-5
-        rounded-full
-        bg-[#0D0502]
-        border
-        border-[#FF6A00]/50
-        shadow-[0_0_12px_rgba(255,106,0,0.45)]
-        transition-all
-        duration-300
-        ${mobileMenuOpen ? "rotate-180" : "rotate-0"}
-      `}
-    >
-      <span className="text-[11px] text-[#FFB347]">
-        {mobileMenuOpen ? "×" : "⌄"}
-      </span>
-    </span>
-  </button>
+              <span
+                className="
+          absolute
+          inset-0
+          rounded-full
+          bg-[#FF6A00]/15
+          blur-2xl
+          opacity-0
+          group-hover:opacity-100
+          transition-opacity
+          duration-500
+          pointer-events-none
+        "
+              />
 
-
-  {/* =====================================================
-      DESKTOP NAVIGATION
-      تظهر فقط من lg وما فوق
-  ===================================================== */}
-  <div className="hidden lg:flex items-center gap-1">
-    {[
-      { href: "#main", label: "الرئيسية" },
-      { href: "#about", label: "ما يميزنا" },
-      { href: "#services", label: "خدماتنا" },
-      { href: "#production", label: "مراحل الإنتاج" },
-      { href: "#why", label: "من نحن" },
-      { href: "#works", label: "مشاريعنا" },
-      { href: "#packages", label: "باقاتنا" },
-      { href: "#contact", label: "تواصل معنا" },
-    ].map((link) => (
-      <a
-        key={link.href}
-        href={link.href}
-        className="
+              {/* Text */}
+              <span
+                className={`
           relative
-          group
-          px-3
-          py-2
-          text-sm
-          md:text-base
-          text-white/80
+          z-10
           transition-all
           duration-500
-          hover:text-white
-        "
-      >
-        {/* Glow behind text */}
-        <span
-          className="
-            absolute
-            inset-0
-            rounded-full
-            bg-[#FF6A00]/30
-            blur-xl
-            opacity-0
-            group-hover:opacity-100
-            transition-opacity
-            duration-500
-            pointer-events-none
-          "
-        />
+          group-hover:text-[#FFB347]
+          ${activeSection === link.href.replace("#", "")
+                    ? "text-[#FFB347] [text-shadow:0_0_8px_rgba(255,106,0,0.9),0_0_18px_rgba(255,106,0,0.55)]"
+                    : ""
+                  }
+        `}
+              >
+                {link.label}
+              </span>
 
-        <span
-          className="
-            absolute
-            inset-0
-            rounded-full
-            bg-[#FF6A00]/15
-            blur-2xl
-            opacity-0
-            group-hover:opacity-100
-            transition-opacity
-            duration-500
-            pointer-events-none
-          "
-        />
-
-        {/* Text */}
-        <span
-          className="
-            relative
-            z-10
-            transition-all
-            duration-500
-            group-hover:text-[#FFB347]
-            group-hover:[text-shadow:0_0_8px_rgba(255,106,0,0.9),0_0_18px_rgba(255,106,0,0.55)]
-          "
-        >
-          {link.label}
-        </span>
-
-        {/* Underline */}
-        <span
-          className="
-            absolute
-            bottom-0
-            left-1/2
-            -translate-x-1/2
-            w-0
-            h-[2px]
-            rounded-full
-            bg-gradient-to-r
-            from-[#FF6A00]
-            to-[#FFD700]
-            shadow-[0_0_8px_#FF6A00]
-            group-hover:w-[60%]
-            transition-all
-            duration-500
-            ease-out
-          "
-        />
-      </a>
-    ))}
-  </div>
-
-
-  {/* =====================================================
+              {/* Underline */}
+              <span
+                className={`
+          absolute
+          bottom-0
+          left-1/2
+          -translate-x-1/2
+          h-[2px]
+          rounded-full
+          bg-gradient-to-r
+          from-[#FF6A00]
+          to-[#FFD700]
+          shadow-[0_0_8px_#FF6A00]
+          transition-all
+          duration-500
+          ease-out
+          ${activeSection === link.href.replace("#", "")
+                    ? "w-[60%]"
+                    : "w-0 group-hover:w-[60%]"
+                  }
+        `}
+              />
+            </a>
+          ))}
+        </div>
+        {/* =====================================================
       DESKTOP CONSULTATION BUTTON
       ===================================================== */}
-  <a
-    href="#contact"
-    className="
+        <a
+          href="#contact"
+          className="
       hidden
       lg:flex
       relative
@@ -417,10 +1129,10 @@ export default function App() {
       hover:scale-105
       hover:shadow-[0_0_30px_rgba(255,60,0,0.75),0_8px_25px_rgba(208,0,0,0.5)]
     "
-  >
-    {/* Button glow */}
-    <span
-      className="
+        >
+          {/* Button glow */}
+          <span
+            className="
         absolute
         inset-0
         rounded-full
@@ -432,35 +1144,35 @@ export default function App() {
         duration-500
         -z-10
       "
-    />
+          />
 
-    <span className="relative z-10 whitespace-nowrap">
-      استشارة مجانية
-    </span>
-  </a>
+          <span className="relative z-10 whitespace-nowrap">
+            استشارة مجانية
+          </span>
+        </a>
 
 
-  {/* =====================================================
+        {/* =====================================================
       MOBILE DROPDOWN MENU
       تظهر فقط على الشاشات الأصغر من lg
   ===================================================== */}
-  {mobileMenuOpen && (
-    <>
-      {/* خلفية شفافة خلف القائمة */}
-      <div
-        onClick={() => setMobileMenuOpen(false)}
-        className="
+        {mobileMenuOpen && (
+          <>
+            {/* خلفية شفافة خلف القائمة */}
+            <div
+              onClick={() => setMobileMenuOpen(false)}
+              className="
           fixed
           inset-0
           top-[84px]
           z-[-1]
           bg-black/30
         "
-      />
+            />
 
-      {/* القائمة */}
-      <div
-        className="
+            {/* القائمة */}
+            <div
+              className="
           lg:hidden
           absolute
           top-[calc(100%+10px)]
@@ -475,11 +1187,11 @@ export default function App() {
           shadow-[0_20px_60px_rgba(0,0,0,0.75),0_0_35px_rgba(255,60,0,0.18)]
           animate-[mobileMenuIn_0.3s_ease-out]
         "
-      >
+            >
 
-        {/* Glow أعلى القائمة */}
-        <div
-          className="
+              {/* Glow أعلى القائمة */}
+              <div
+                className="
             absolute
             top-0
             left-1/2
@@ -490,11 +1202,11 @@ export default function App() {
             blur-3xl
             pointer-events-none
           "
-        />
+              />
 
-        {/* خط علوي */}
-        <div
-          className="
+              {/* خط علوي */}
+              <div
+                className="
             absolute
             top-0
             left-[15%]
@@ -506,38 +1218,38 @@ export default function App() {
             to-transparent
             shadow-[0_0_12px_#FF6A00]
           "
-        />
+              />
 
-        <div className="relative p-3">
+              <div className="relative p-3">
 
-          {/* عنوان صغير */}
-          <div className="px-4 pt-2 pb-3 text-right">
-            <div className="text-[9px] tracking-[0.3em] text-[#FF6A00]/70">
-              W PHOENIX
-            </div>
+                {/* عنوان صغير */}
+                <div className="px-4 pt-2 pb-3 text-right">
+                  <div className="text-[9px] tracking-[0.3em] text-[#FF6A00]/70">
+                    W PHOENIX
+                  </div>
 
-            <div className="mt-1 text-[12px] text-white/40">
-              من الفكرة إلى التحليق 🔥
-            </div>
-          </div>
+                  <div className="mt-1 text-[12px] text-white/40">
+                    من الفكرة إلى التحليق 🔥
+                  </div>
+                </div>
 
 
-          {/* الروابط */}
-          {[
-            { href: "#main", label: "الرئيسية" },
-            { href: "#about", label: "ما يميزنا" },
-            { href: "#services", label: "خدماتنا" },
-            { href: "#production", label: "مراحل الإنتاج" },
-            { href: "#why", label: "من نحن" },
-            { href: "#works", label: "مشاريعنا" },
-            { href: "#packages", label: "باقاتنا" },
-            { href: "#contact", label: "تواصل معنا" },
-          ].map((link, index) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="
+                {/* الروابط */}
+                {[
+                  { href: "#main", label: "الرئيسية" },
+                  { href: "#about", label: "ما يميزنا" },
+                  { href: "#services", label: "خدماتنا" },
+                  { href: "#production", label: "مراحل الإنتاج" },
+                  { href: "#why", label: "من نحن" },
+                  { href: "#works", label: "مشاريعنا" },
+                  { href: "#packages", label: "باقاتنا" },
+                  { href: "#contact", label: "تواصل معنا" },
+                ].map((link, index) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="
                 group
                 relative
                 flex
@@ -556,14 +1268,14 @@ export default function App() {
                 hover:bg-[#FF6A00]/10
                 hover:text-[#FFB347]
               "
-              style={{
-                animation: `mobileItemIn 0.3s ease-out ${index * 45}ms both`,
-              }}
-            >
+                    style={{
+                      animation: `mobileItemIn 0.3s ease-out ${index * 45}ms both`,
+                    }}
+                  >
 
-              {/* خط برتقالي عند Hover */}
-              <span
-                className="
+                    {/* خط برتقالي عند Hover */}
+                    <span
+                      className="
                   absolute
                   right-0
                   top-1/2
@@ -579,16 +1291,16 @@ export default function App() {
                   transition-all
                   duration-300
                 "
-              />
+                    />
 
-              {/* النص */}
-              <span className="relative z-10">
-                {link.label}
-              </span>
+                    {/* النص */}
+                    <span className="relative z-10">
+                      {link.label}
+                    </span>
 
-              {/* السهم */}
-              <span
-                className="
+                    {/* السهم */}
+                    <span
+                      className="
                   text-[#FF6A00]/50
                   group-hover:text-[#FFB347]
                   group-hover:-translate-x-1
@@ -596,16 +1308,16 @@ export default function App() {
                   duration-300
                   text-[14px]
                 "
-              >
-                ←
-              </span>
-            </a>
-          ))}
+                    >
+                      ←
+                    </span>
+                  </a>
+                ))}
 
 
-          {/* فاصل */}
-          <div
-            className="
+                {/* فاصل */}
+                <div
+                  className="
               my-3
               h-[1px]
               bg-gradient-to-r
@@ -613,14 +1325,14 @@ export default function App() {
               via-[#FF6A00]/20
               to-transparent
             "
-          />
+                />
 
 
-          {/* زر الاستشارة داخل القائمة */}
-          <a
-            href="#contact"
-            onClick={() => setMobileMenuOpen(false)}
-            className="
+                {/* زر الاستشارة داخل القائمة */}
+                <a
+                  href="#contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="
               relative
               flex
               items-center
@@ -644,17 +1356,17 @@ export default function App() {
               transition-all
               duration-300
             "
-          >
-            <span>
-              استشارة مجانية 🔥
-            </span>
-          </a>
+                >
+                  <span>
+                    استشارة مجانية 🔥
+                  </span>
+                </a>
 
-        </div>
+              </div>
 
-        {/* خط سفلي */}
-        <div
-          className="
+              {/* خط سفلي */}
+              <div
+                className="
             h-[2px]
             w-full
             bg-gradient-to-r
@@ -662,11 +1374,11 @@ export default function App() {
             via-[#FF6A00]/50
             to-transparent
           "
-        />
-      </div>
-    </>
-  )}
-</nav>
+              />
+            </div>
+          </>
+        )}
+      </nav>
 
       {/* ===== HERO ===== */}
       <section id="main" className="relative z-20 w-full overflow-hidden  pt-[72px]">
@@ -758,9 +1470,10 @@ export default function App() {
           </FadeIn>
 
           <FadeIn delay={600}>
-            <div className="mt-10 flex items-center gap-2 text-[11px] tracking-[0.16em] text-white/45">
-              <span className="w-[34px] h-[1px] bg-[#FF6A00]/60" />فريق عمل قوي جاهز 24 ساعه • 4 سنوات خبرةللنهوض من الرماد
-              <span className="w-[34px] h-[1px] bg-[#FF6A00]/60" />
+            <div className="mt-10 flex items-center justify-center gap-2 text-[11px] tracking-[0.16em] text-white/45 text-center">
+              <span className="w-[34px] h-[1px] bg-[#FF6A00]/60 shrink-0" />
+              <span>فريق عمل قوي جاهز 24 ساعه • 4 سنوات خبرة للنهوض من الرماد </span>
+              <span className="w-[34px] h-[1px] bg-[#FF6A00]/60 shrink-0" />
             </div>
           </FadeIn>
 
@@ -776,20 +1489,20 @@ export default function App() {
       {/* ===== ABOUT ===== */}
       <section id="about" className="relative z-20 bg-[#0D0502]/92 border-y border-[#FF6A00]/10 px-6 md:px-[80px] py-[88px] md:py-[120px]">
         <div className="max-w-[1180px] mx-auto grid md:grid-cols-[1.15fr_0.85fr] gap-12 md:gap-16 items-start">
-      <FadeIn>
+          <FadeIn>
             <div className="flex items-center gap-3 mb-6">
               <span className="w-[40px] h-[2px] bg-[#FF6A00]" />
               <span className="text-[#FF6A00] text-[18px]">🔥</span>
             </div>
             <h2 className="text-[30px] md:text-[42px] font-extrabold leading-[1.1]">لديك فكرة<br />مركونة على الرف او لديك تطبيق قديم وغير مواكب للتقنيات الحديثة؟</h2>
-           <div className="mt-8 space-y-6 text-[14px] leading-[1.9] text-white/65">
-              <p>كثيرٌ من رواد الأعمال عندهم فكرة قوية… لكنها تموت قبل أن تولد. مطور يختفي، تصميم معقد، تكلفة فلكية، وتطبيق بطيء لا يعمل</p>
+            <div className="mt-8 space-y-6 text-[14px] leading-[1.9] text-white/65">
+              <p>كثيرٌ من رواد الأعمال لديهم فكرة قوية… لكنها تموت قبل أن تولد. مطور يختفي، تصميم معقد، تكلفة فلكية، وتطبيق بطيء لا يعمل</p>
               <p className="text-white/85 font-semibold">اتينا لنكسر الحلقة.</p>
-                  <div className="pt-4 grid grid-cols-1 gap-4">
+              <div className="pt-4 grid grid-cols-1 gap-4">
                 {[
-               { t: "قبل الفينيق", d: "فكرة محبوسة، مطورين يختفون، تكلفة عالية، لا يوجد إطلاق للموقع." },
+                  { t: "قبل الفينيق", d: "فكرة محبوسة، مطورين يختفون، تكلفة عالية، لا يوجد إطلاق للموقع." },
                   { t: "بعد الفينيق", d: "فكرة تتحول لتطبيق حي، إطلاق سريع، متابعة يومية، نمو مستمر." },
-                   ].map((item) => (
+                ].map((item) => (
                   <div key={item.t} className="flex gap-4 p-4 rounded-[6px] border border-[#FF6A00]/15 bg-[#150800]/70 hover:border-[#FF6A00]/40 hover:bg-[#1F0B00]/80 hover:-translate-y-[1px] hover:shadow-[0_8px_25px_rgba(255,106,0,0.12)] transition-all duration-300">
                     <div className="w-[36px] h-[36px] shrink-0 rounded-full bg-gradient-to-br from-[#FF6A00] to-[#D00000] flex items-center justify-center text-[14px]">{item.t.includes("قبل") ? "🌑" : "🔥"}</div>
                     <div>
@@ -813,7 +1526,7 @@ export default function App() {
                   <div className="w-2 h-2 rounded-full bg-[#FF0000] shadow-[0_0_10px_#FF0000]" style={{ opacity: 0.6 + flicker * 0.4 }} />
                 </div>
                 <div className="space-y-4">
-                  {["اكتشاف الفكرة", "صهر التصميم","تحليل النظام ", "إيقاد نار الكود", "الإطلاق الكامل للمشروع"].map((s, idx) => (
+                  {["اكتشاف الفكرة", "صهر التصميم", "تحليل النظام ", "إيقاد نار الكود", "الإطلاق الكامل للمشروع"].map((s, idx) => (
                     <div key={s} className="flex items-center gap-4">
                       <div className="w-[36px] h-[36px] rounded-full bg-[#FF6A00]/20 border border-[#FF6A00]/30 flex items-center justify-center text-[12px] font-bold text-[#FFB347]">{idx + 1}</div>
                       <div className="flex-1 h-[2px] bg-gradient-to-r from-[#FF6A00]/60 to-transparent" />
@@ -840,8 +1553,8 @@ export default function App() {
           </FadeIn>
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "📱", title: "تفاعلي Flutter تطبيق", desc: "تطبيق واحد يعمل على iOS و Android بسرعة البرق. 60fps، أداء ناري، وتجربة لا تُنسى.", tags: ["iOS + Android", "أداء 60fps"] },
-              { icon: "🌐", title: "مواقع تحول الزائر لعميل", desc: "موقع سريع، SEO جاهز، وتصميم يباع قبل أن تتكلم. من صفحة هبوط إلى متجر متكامل.", tags: ["Next.js", "SEO","React.js","laravel","asp.net"] },
+              { icon: "📱", title: "تطبيق موبايل احترافي تفاعلي", desc: "تطبيق واحد يعمل على iOS و Android بسرعة البرق. 60fps، أداء ناري، وتجربة لا تُنسى.", tags: ["flutter", "iOS + Android", "أداء 60fps"] },
+              { icon: "🌐", title: "مواقع تحول الزائر لعميل", desc: "موقع سريع، SEO جاهز، وتصميم يباع قبل أن تتكلم. من صفحة هبوط إلى متجر متكامل.", tags: ["Next.js", "SEO", "React.js", "laravel"] },
               { icon: "🎨", title: "تصميم UI/UX يحرق المنافسين", desc: "تصميم يفهم المستخدم قبل أن يضغط. ألوان متناسقة، حركة سلسة.", tags: ["Figma"] },
               { icon: "🧠", title: "أنظمة ذكية تنمو معك", desc: "لوحة تحكم، API ,ذكاء اصطناعي، وربط مع كل شيء. نظام يكبر معك ، بتطوير مستمر.", tags: ["API", "AI Ready"] },
             ].map((s, i) => (
@@ -865,9 +1578,9 @@ export default function App() {
       <section id="production" className="relative z-20 bg-[#0D0502]/92 px-6 md:px-[80px] py-[96px] md:py-[120px]">
         <div className="max-w-[1180px] mx-auto">
           <FadeIn>
-             <h2 className="text-[26px] md:text-[34px] font-extrabold text-center">كيف نحول فكرتك لطائر فينيق؟</h2>
+            <h2 className="text-[26px] md:text-[34px] font-extrabold text-center">كيف نحول فكرتك لطائر فينيق؟</h2>
             <p className="mt-3 text-center text-[12.5px] text-white/55">4 مراحل، كل مرحلة ولادة جديدة — من الرماد إلى التحليق.</p>
-            </FadeIn>
+          </FadeIn>
           <div className="relative mt-16">
             <div className="hidden md:block absolute top-[36px] left-[8%] right-[8%] h-[2px] bg-gradient-to-r from-[#D00000] via-[#FF6A00] to-[#FFD700] opacity-40" />
             <div className="grid md:grid-cols-4 gap-8">
@@ -928,209 +1641,524 @@ export default function App() {
       </section>
 
       {/* ===== PROJECTS SECTION - REPLACES TESTIMONIAL ===== */}
-      <section id="works" className="relative z-20 bg-[#0D0502]/92 px-6 md:px-[80px] py-[96px] md:py-[120px]">
-        <div className="max-w-[1180px] mx-auto">
-          <FadeIn>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="w-[40px] h-[2px] bg-[#FF6A00]" />
-              <span className="text-[11px] tracking-[0.25em] text-[#FFB347]">OUR LEGACY • صُنع في النار</span>
+      {/* ===== WORKS - SWIPER ===== */}
+      <section
+        id="works"
+        className="relative z-20 bg-[#0D0502]/92 px-6 md:px-16 py-24 md:py-32 overflow-hidden"
+      >
+        <div className="max-w-[1280px] mx-auto flex flex-col items-center">
+
+          {/* TITLE */}
+          <FadeIn className="text-center">
+            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-[#FF6A00]/20 bg-[#FF6A00]/5 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6A00] animate-pulse" />
+
+              <span className="text-[10px] md:text-[11px] tracking-[0.2em] text-[#FFB347]">
+                OUR LEGACY
+              </span>
             </div>
-            <h2 className="text-[30px] md:text-[44px] font-extrabold leading-[1.1]">مشاريع صنعتها النار</h2>
-            <p className="mt-3 text-[13px] md:text-[14px] leading-[1.8] text-white/55">من الرماد إلى التطبيق • مشاريع حقيقية نهضت مع الفينيق </p>
+
+            <h2 className="text-3xl md:text-5xl font-extrabold">
+              مشاريع صنعتها النار
+            </h2>
           </FadeIn>
 
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Cody Card */}
-            <FadeIn delay={120}>
-              <div 
-                onClick={() => setSelectedProject("cody")}
-                className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
-              >
-                <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
-                  <img src={codyImage} alt="Cody - المساعد الذكي" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
-                  <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">AI • Flutter</div>
-                  <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
-                </div>
-                <div className="p-6">
-                  <h3 className="font-bold text-[16px] leading-[1.3]">Cody - المساعد الذكي</h3>
-                  <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
-                    تطبيق ذكاء اصطناعي بشخصية روبوت لطيف، يساعد المستخدمين بذكاء وتفاعل. واجهة عصرية، ردود فورية، وتجربة لا تُنسى. مبني بـ Flutter مع تكامل AI متقدم وتصميم محبب.
-                  </p>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {["Flutter", "AI", "UI/UX"].map((t) => (
-                      <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
-                    ))}
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
-                    <span className="text-[11px] text-white/50 tracking-wide">تم الإطلاق في 21 يوم • +5k مستخدم</span>
-                    <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
-                  </div>
-                </div>
-              </div>
-            </FadeIn>
+          {/* SWIPER */}
+          <div className="relative mt-14 w-full">
 
-            {/* Malaz Card */}
-            <FadeIn delay={240}>
-              <div 
-                onClick={() => setSelectedProject("malaz")}
-                className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
-              >
-                <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
-                  <img src={malazImage} alt="ملاذ - دليل الأماكن" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
-                  <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">Maps • حجز</div>
-                  <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
-                </div>
-                <div className="p-6">
-                  <h3 className="font-bold text-[16px] leading-[1.3]">ملاذ - دليل الأماكن</h3>
-                  <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
-                    تطبيق سياحي متكامل لاكتشاف المطاعم، الحدائق، والمعالم. خرائط تفاعلية، حجز فوري، وتجربة مستخدم سلسة. تصميم عصري بألوان هادئة وتجربة تنقل مذهلة.
-                  </p>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {["Flutter", "Maps", "حجز"].map((t) => (
-                      <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
-                    ))}
+            <Swiper
+              modules={[
+                EffectCoverflow,
+                Navigation,
+                Pagination,
+                Autoplay
+              ]}
+              effect="coverflow"
+              grabCursor={true}
+              centeredSlides={true}
+              loop={true}
+              slidesPerView="auto"
+              spaceBetween={20}
+
+              speed={850}
+
+              coverflowEffect={{
+                rotate: 0,
+                stretch: 0,
+                depth: 180,
+                modifier: 1.15,
+                slideShadows: false,
+              }}
+
+              autoplay={{
+                delay: 3200,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+                waitForTransition: true,
+              }}
+
+              navigation={{
+                nextEl: ".w-next",
+                prevEl: ".w-prev",
+              }}
+
+              pagination={{
+                clickable: true,
+                el: ".w-dots",
+              }}
+
+              className="w-full !pb-10"
+            >
+
+              {projects.map((p) => (
+                <SwiperSlide
+                  key={p.id}
+                  className="!w-[300px] md:!w-[350px] !h-auto"
+                >
+
+                  {/* CARD */}
+                  <div
+                    onClick={() => navigate(`/project/${p.id}`)}
+                    className="
+                group
+                relative
+                w-[300px]
+                h-[500px]
+                md:w-[350px]
+                md:h-[520px]
+
+                rounded-[22px]
+
+                bg-[#121212]/95
+                backdrop-blur-xl
+
+                border
+                border-white/[0.08]
+
+                overflow-hidden
+
+                flex
+                flex-col
+
+                cursor-pointer
+
+                transition-all
+                duration-700
+                ease-[cubic-bezier(0.16,1,0.3,1)]
+
+                hover:border-[#FF6A00]/50
+
+                hover:shadow[
+                  0_25px_70px_rgba(0,0,0,0.7),
+                  0_0_40px_rgba(255,106,0,0.22)
+                ]
+              "
+                  >
+
+                    {/* IMAGE */}
+                    <div className="relative w-full h-[230px] md:h-[255px] overflow-hidden bg-[#080808] shrink-0">
+
+                      <img
+                        src={p.image}
+                        alt={p.title}
+                        className="
+                    w-full
+                    h-full
+                    object-cover
+
+                    group-hover:scale-[1.07]
+
+                    transition-transform
+                    duration-[1000ms]
+                    ease-[cubic-bezier(0.16,1,0.3,1)]
+                  "
+                      />
+
+                      {/* DARK GRADIENT */}
+                      <div className="
+                  absolute
+                  inset-0
+                  bg-gradient-to-t
+                  from-[#0D0502]
+                  via-black/10
+                  to-transparent
+                " />
+
+                      {/* CATEGORY */}
+                      <div className="
+                  absolute
+                  top-4
+                  left-4
+
+                  px-3
+                  py-1.5
+
+                  rounded-full
+
+                  bg-black/65
+                  backdrop-blur-md
+
+                  border
+                  border-white/10
+
+                  text-[10px]
+                  text-[#FFB347]
+                ">
+                        {p.tag}
+                      </div>
+
+                      {/* CENTER INDICATOR */}
+                      <div className="
+                  absolute
+                  bottom-4
+                  right-4
+
+                  px-3
+                  py-1.5
+
+                  rounded-full
+
+                  bg-[#FF6A00]/90
+
+                  text-[10px]
+                  font-semibold
+                  text-white
+
+                  opacity-0
+                  translate-y-2
+
+                  group-hover:opacity-100
+                  group-hover:translate-y-0
+
+                  transition-all
+                  duration-500
+                ">
+                        اضغط للتفاصيل ←
+                      </div>
+                    </div>
+
+                    {/* CONTENT */}
+                    <div className="p-5 md:p-6 flex flex-col flex-1">
+
+                      <h3 className="
+                  text-[17px]
+                  md:text-[18px]
+                  font-bold
+                  leading-tight
+                  text-white
+                ">
+                        {p.title}
+                      </h3>
+
+                      <p className="
+                  mt-3
+                  text-[12px]
+                  md:text-[12.5px]
+                  leading-[1.8]
+                  text-white/50
+                  line-clamp-3
+                ">
+                        {p.desc}
+                      </p>
+
+                      {/* TECH */}
+                      <div className="mt-5 flex flex-wrap gap-1.5">
+                        {p.tech.map((t: string) => (
+                          <span
+                            key={t}
+                            className="
+                        px-2.5
+                        py-1
+                        rounded-full
+
+                        text-[9px]
+
+                        border
+                        border-white/10
+
+                        bg-white/[0.05]
+
+                        text-white/60
+
+                        transition-colors
+                        duration-300
+
+                        group-hover:border-[#FF6A00]/20
+                        group-hover:text-[#FFB347]
+                      "
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* FOOTER */}
+                      <div className="
+                  mt-auto
+                  pt-5
+                  border-t
+                  border-white/[0.06]
+
+                  flex
+                  items-center
+                  justify-between
+                ">
+
+                        <span className="
+                    text-[10px]
+                    text-white/30
+                  ">
+                          {p.meta}
+                        </span>
+
+                        <span className="
+                    w-9
+                    h-9
+                    rounded-full
+
+                    bg-[#FF6A00]
+
+                    flex
+                    items-center
+                    justify-center
+
+                    text-white
+
+                    group-hover:scale-110
+                    group-hover:shadow-[0_0_20px_rgba(255,106,0,0.45)]
+
+                    transition-all
+                    duration-500
+                  ">
+                          →
+                        </span>
+
+                      </div>
+                    </div>
+
                   </div>
-                  <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
-                    <span className="text-[11px] text-white/50 tracking-wide">+10k تحميل • 4.8 ⭐</span>
-                    <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
-                  </div>
-                </div>
-              </div>
-            </FadeIn>
-{/* ===== ARABESC CARD ===== */}
-<FadeIn delay={260}>
-  <div
-    onClick={() => setSelectedProject("arabesc")}
-    className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
-  >
-    <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
-      <img src={arabescImage} alt="Arabesc Restaurant & Cafe" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
-      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">WordPress • WooCommerce</div>
-      <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
-    </div>
-    <div className="p-6">
-      <h3 className="font-bold text-[16px] leading-[1.3]">Arabesc Restaurant & Cafe</h3>
-      <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
-        موقع WordPress مخصص لمطعم سوري في Hachioji اليابان. يجمع بين النكهات الشرقية الأصيلة وتجربة رقمية عصرية وسهلة الاستخدام مع نظام طلبات متكامل.
-      </p>
-      <div className="mt-5 flex flex-wrap gap-2">
-        {["WordPress", "WooCommerce", "عربي/ياباني"].map((t) => (
-          <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
-        ))}
-      </div>
-      <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
-        <span className="text-[11px] text-white/50 tracking-wide">مطعم • حجز طاولات</span>
-        <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
-      </div>
-    </div>
-  </div>
-</FadeIn>
 
-{/* ===== JAPANESE ACADEMY CARD ===== */}
-<FadeIn delay={280}>
-  <div
-    onClick={() => setSelectedProject("japanese-academy")}
-    className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
-  >
-    <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
-      <img src={japaneseAcademyImage} alt="Japanese Academy" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
-      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">React • TypeScript</div>
-      <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
-    </div>
-    <div className="p-6">
-      <h3 className="font-bold text-[16px] leading-[1.3]">Japanese Academy</h3>
-      <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
-        منصة تعليمية متكاملة لتعلم اللغة اليابانية. واجهة نظيفة ومنظمة بتصميم UI/UX مدروس لتسهيل الوصول للموارد ومتابعة الدروس.
-      </p>
-      <div className="mt-5 flex flex-wrap gap-2">
-        {["React", "TypeScript", "تعليم"].map((t) => (
-          <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
-        ))}
-      </div>
-      <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
-        <span className="text-[11px] text-white/50 tracking-wide">تعليم • منصة طلاب</span>
-        <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
-      </div>
-    </div>
-  </div>
-</FadeIn>
+                </SwiperSlide>
+              ))}
 
-{/* ===== SILK ROAD LODGE CARD ===== */}
-<FadeIn delay={300}>
-  <div
-    onClick={() => setSelectedProject("silk-road")}
-    className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
-  >
-    <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
-      <img src={silkRoadImage} alt="Silk Road Lodge" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
-      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">Laravel • React</div>
-      <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
-    </div>
-    <div className="p-6">
-      <h3 className="font-bold text-[16px] leading-[1.3]">Silk Road Lodge</h3>
-      <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
-        منصة حجز فندقي أنيقة في قلب تدمر التاريخي. محتوى متعدد اللغات، تصميم CSS مخصص، وتدفق حجز بديهي يمزج التراث بالضيافة العصرية.
-      </p>
-      <div className="mt-5 flex flex-wrap gap-2">
-        {["Laravel", "Tailwind", "حجز"].map((t) => (
-          <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
-        ))}
-      </div>
-      <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
-        <span className="text-[11px] text-white/50 tracking-wide">فندق • Palmyra</span>
-        <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
-      </div>
-    </div>
-  </div>
-</FadeIn>
+            </Swiper>
 
-{/* ===== FOR SYRIA SAFETY CARD ===== */}
-<FadeIn delay={320}>
+
+{/* CONTROLS */}
+<div
+  className="
+    relative
+    mt-6
+    w-full
+    h-10
+    flex
+    items-center
+    justify-center
+  "
+>
+  {/* مجموعة التحكم كاملة في المنتصف */}
   <div
-    onClick={() => setSelectedProject("for-syria-safety")}
-    className="group h-full rounded-[12px] border border-[#FF6A00]/20 bg-gradient-to-b from-[#1F0B00]/90 to-[#0D0502]/90 overflow-hidden hover:border-[#FF6A00]/50 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(255,106,0,0.28)] transition-all duration-500 cursor-pointer"
+    className="
+      flex
+      items-center
+      justify-center
+      gap-5
+    "
   >
-    <div className="relative h-[256px] overflow-hidden border-b border-[#FF6A00]/10 bg-black">
-      <img src={forSyriaSafetyImage} alt="For Syria Safety" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0502] via-[#0D0502]/10 to-transparent" />
-      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0D0502]/70 backdrop-blur border border-[#FF6A00]/20 text-[10px] text-[#FFB347]">Humanitarian • React</div>
-      <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#D00000] to-[#FF6A00] text-[11px] font-bold shadow-[0_0_20px_rgba(255,106,0,0.5)]">اضغط للتفاصيل ←</div>
-    </div>
-    <div className="p-6">
-      <h3 className="font-bold text-[16px] leading-[1.3]">For Syria Safety</h3>
-      <p className="mt-3 text-[12.5px] leading-[1.8] text-white/60">
-        منصة إنسانية لتوعية السوريين بمخاطر الألغام ومخلفات الحرب. تبليغ عن أماكن مشبوهة، تتبع فرق الإزالة، وموارد تثقيفية لحماية المجتمع.
-      </p>
-      <div className="mt-5 flex flex-wrap gap-2">
-        {["React", "Laravel", "إنساني"].map((t) => (
-          <span key={t} className="px-2.5 py-1 rounded-full text-[10px] border border-[#FF6A00]/20 bg-[#FF6A00]/10 text-[#FFB347]">{t}</span>
-        ))}
-      </div>
-      <div className="mt-6 pt-4 border-t border-[#FF6A00]/10 flex items-center justify-between">
-        <span className="text-[11px] text-white/50 tracking-wide">توعية • سلامة مجتمع</span>
-        <span className="text-[11px] text-[#FF6A00] group-hover:translate-x-[-2px] transition-transform">→</span>
-      </div>
-    </div>
+
+    {/* PREVIOUS */}
+    <button
+      type="button"
+      className="
+        w-prev
+        w-10
+        h-10
+        shrink-0
+
+        rounded-full
+
+        bg-white/[0.05]
+        border
+        border-white/10
+
+        flex
+        items-center
+        justify-center
+
+        text-white/50
+        text-base
+
+        hover:bg-[#FF6A00]/15
+        hover:border-[#FF6A00]/40
+        hover:text-[#FF6A00]
+
+        transition-all
+        duration-300
+      "
+    >
+      →
+    </button>
+
+    {/* PAGINATION */}
+    <div
+      className="
+        w-dots
+        flex
+        items-center
+        justify-center
+        gap-2
+        shrink-0
+      "
+    />
+
+    {/* NEXT */}
+    <button
+      type="button"
+      className="
+        w-next
+        w-10
+        h-10
+        shrink-0
+
+        rounded-full
+
+        bg-white/[0.05]
+        border
+        border-white/10
+
+        flex
+        items-center
+        justify-center
+
+        text-white/50
+        text-base
+
+        hover:bg-[#FF6A00]/15
+        hover:border-[#FF6A00]/40
+        hover:text-[#FF6A00]
+
+        transition-all
+        duration-300
+      "
+    >
+      ←
+    </button>
+
   </div>
-</FadeIn>
+</div>
+
+
+
+
+
+    
 
           </div>
-
-          <FadeIn delay={360} className="mt-12 flex justify-center">
-            <div className="inline-flex items-center gap-3 px-5 py-3 rounded-full border border-[#FF6A00]/15 bg-[#150800]/60 text-[11px] text-white/55">
-              <span className="w-2 h-2 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00]" />
-              مشاريع حية على المتاجر • كود نظيف • تصميم يبيع
-              <span className="w-2 h-2 rounded-full bg-[#FFD700] shadow-[0_0_8px_#FFD700]" />
-            </div>
-          </FadeIn>
         </div>
-      </section>
 
+        {/* SWIPER EFFECT */}
+        <style>{`
+
+    /* كل بطاقة */
+    #works .swiper-slide {
+      opacity: 0.35;
+      transform: scale(0.82);
+      filter: blur(1px);
+
+      transition:
+        transform 850ms cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 700ms ease,
+        filter 700ms ease;
+    }
+
+    /* البطاقات القريبة من الوسط */
+    #works .swiper-slide-prev,
+    #works .swiper-slide-next {
+      opacity: 0.62;
+      transform: scale(0.88);
+      filter: blur(0.4px);
+    }
+
+    /* البطاقة المركزية */
+    #works .swiper-slide-active {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+
+      z-index: 5;
+    }
+
+    /* Glow للبطاقة المركزية */
+    #works .swiper-slide-active > div {
+      border-color: rgba(255,106,0,0.42);
+
+      box-shadow:
+        0 25px 70px rgba(0,0,0,0.65),
+        0 0 45px rgba(255,106,0,0.12);
+
+      transition:
+        border-color 700ms ease,
+        box-shadow 700ms ease;
+    }
+
+    /* عند الانتقال للبطاقة الجديدة */
+    #works .swiper-slide-active img {
+      transform: scale(1.02);
+
+      transition:
+        transform 900ms cubic-bezier(0.16,1,0.3,1);
+    }
+
+    /* النقاط */
+    #works .w-dots .swiper-pagination-bullet {
+      width: 6px;
+      height: 6px;
+
+      margin: 0 3px !important;
+
+      background: rgba(255,255,255,0.2);
+
+      opacity: 1;
+
+      border-radius: 999px;
+
+      transition:
+        width 400ms ease,
+        background 300ms ease,
+        box-shadow 300ms ease;
+    }
+
+    #works .w-dots .swiper-pagination-bullet-active {
+      width: 22px;
+
+      background: #FF6A00;
+
+      box-shadow:
+        0 0 12px rgba(255,106,0,0.55);
+    }
+
+    /* إخفاء Scrollbar */
+    #works .swiper {
+      overflow: visible;
+    }
+
+    /* الموبايل */
+    @media (max-width: 768px) {
+
+      #works .swiper-slide-prev,
+      #works .swiper-slide-next {
+        opacity: 0.35;
+        transform: scale(0.82);
+      }
+
+      #works .swiper-slide-active {
+        transform: scale(1);
+      }
+
+    }
+
+  `}</style>
+      </section>
       {/* ===== PACKAGES ===== */}
       <section id="packages" className="relative z-20 bg-[#150800]/92 px-6 md:px-[80px] py-[96px] md:py-[120px] border-y border-[#FF6A00]/10">
         <div className="max-w-[1180px] mx-auto">
@@ -1176,24 +2204,24 @@ export default function App() {
               <h2 className="mt-8 text-[30px] md:text-[42px] font-black leading-[1.1] text-white">جاهز تبعث فكرتك<br />من الرماد؟</h2>
               <p className="mt-4 text-[13.5px] leading-[1.8] text-white/80 max-w-[520px] mx-auto">لا تخلي فكرتك تموت على الرف. احجز استشارتك المجانية الآن، وخلال 48 ساعة نرجع لك بخطة إطلاق كاملة — بدون التزام، بدون لف ودوران.</p>
               <div className="mt-8 flex flex-col md:flex-row gap-3 justify-center">
-  <a
-    href="https://www.instagram.com/w_phoenix2026?utm_source=qr&igsi=czIwMWJoa2Q2cng2"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="h-[48px] px-8 rounded-[4px] bg-[#0D0502] text-white font-bold text-[13px] border border-white/10 hover:bg-black transition shadow-[0_8px_30px_rgba(0,0,0,0.4)] flex items-center justify-center"
-  >
-    ابدأ مشروعك الآن 🔥 — استشارة مجانية
-  </a>
+                <a
+                  href="https://www.instagram.com/w_phoenix2026?utm_source=qr&igsi=czIwMWJoa2Q2cng2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-[48px] px-8 rounded-[4px] bg-[#0D0502] text-white font-bold text-[13px] border border-white/10 hover:bg-black transition shadow-[0_8px_30px_rgba(0,0,0,0.4)] flex items-center justify-center"
+                >
+                  ابدأ مشروعك الآن 🔥 — استشارة مجانية
+                </a>
 
-  <a
-    href="https://wa.me/qr/2JYYDILTC5PWI1"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="h-[48px] px-8 rounded-[4px] bg-white/10 backdrop-blur border border-white/20 text-white font-semibold text-[13px] hover:bg-white/15 transition flex items-center justify-center"
-  >
-    واتساب مباشر
-  </a>
-</div>
+                <a
+                  href="https://wa.me/qr/2JYYDILTC5PWI1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-[48px] px-8 rounded-[4px] bg-white/10 backdrop-blur border border-white/20 text-white font-semibold text-[13px] hover:bg-white/15 transition flex items-center justify-center"
+                >
+                  واتساب مباشر
+                </a>
+              </div>
               <div className="mt-6 text-[11px] text-white/60">⏱ نرد خلال ساعتين • 🔒 سرية تامة لفكرتك • 🚀 إطلاق أول نسخة خلال 3 أسابيع</div>
             </FadeIn>
           </div>
@@ -1203,455 +2231,7 @@ export default function App() {
         </div>
       </section>
 
-{/* ===== PROJECT DETAILS MODAL - FULL PRESERVED DESIGN ===== */}
-      {selectedProject && (
-        <div className="fixed inset-0 z-[200] overflow-y-auto bg-[#0D0502]/95 backdrop-blur-[8px]">
-          <div className="min-h-screen px-4 md:px-8 py-8">
-            <div className="max-w-[1100px] mx-auto">
-              <button 
-                onClick={() => setSelectedProject(null)} 
-                className="mb-8 flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#FF6A00]/30 bg-[#0D0502]/80 hover:bg-[#FF6A00]/10 transition text-[13px] font-bold cursor-pointer"
-              >
-                <span>←</span> العودة للمشاريع
-              </button>
 
-              {/* ===== CODY ===== */}
-              {selectedProject === "cody" && (
-                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
-                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
-                      <div>
-                        <div className="inline-flex gap-2 mb-4">
-                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">AI • Flutter</span>
-                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">تم الإطلاق في 21 يوم</span>
-                        </div>
-                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Cody — المساعد الذكي للمبرمجين</h1>
-                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">تطبيق ذكاء اصطناعي بشخصية روبوت لطيف يساعد المطورين على بناء مشاريع كاملة عبر شات AI فقط. واجهة تفاعلية، لوحة تحكم، وإدارة مشاريع ذكية.</p>
-                        <div className="mt-6 flex flex-wrap gap-2">
-                          {["Flutter", "Firebase", "AI Chat", "Dart", "Dashboard"].map(t => (
-                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
-                        <img src={codyImage} alt="Cody" className="w-full h-[320px] object-cover" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
-                    <h2 className="text-[18px] font-bold flex items-center gap-2">
-                      <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" /> الفيديوهات التوضيحية
-                    </h2>
-                    <p className="mt-2 text-[12.5px] text-white/50">فيديوهان يوضحان رحلة المستخدم داخل التطبيق</p>
-                    <div className="mt-6 grid md:grid-cols-2 gap-5">
-                      <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
-                        <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
-                          <span className="text-[12px] font-bold">الفيديو 1 — عرض التطبيق الكامل</span>
-                          <span className="text-[10px] text-white/40">FULL DEMO</span>
-                        </div>
-                        <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={codyImage}>
-                          <source src={codyVideo} type="video/mp4" />
-                        </video>
-                      </div>
-                      <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
-                        <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
-                          <span className="text-[12px] font-bold">الفيديو 2 — برومو المشروع</span>
-                          <span className="text-[10px] text-white/40">UI FLOW</span>
-                        </div>
-                        <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={promoVideo}>
-                          <source src={promoVideo} type="video/mp4" />
-                        </video>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
-                    <div>
-                      <h3 className="text-[16px] font-bold">شرح الواجهات بالتفصيل</h3>
-                      <ul className="mt-5 space-y-4">
-                        {[
-                          { t: "شاشة تسجيل الدخول وإنشاء حساب", d: "واجهة ترحيبية بشخصية Cody، حقول اسم وإيميل وباسوورد مع تصميم متدرج." },
-                          { t: "لوحة التحكم Dashboard", d: "عرض جميع المشاريع، نسب الإنجاز، إحصائيات، وإدارة سريعة." },
-                          { t: "قائمة المشاريع المكتملة بنجاح", d: "شبكة مشاريع مع أيقونات Cody، أسماء الصفحات، والانتقال للوحة التحكم." },
-                          { t: "عرض المشروع الخاص", d: "صفحة تعرض تفاصيل مشروعك، صفحاته، وميزاته مع إمكانية التعديل." },
-                          { t: "إضافة مشروع وميزات جديدة", d: "نماذج إدخال اسم المشروع، الوصف، اللغة، وإضافة Features بسهولة." },
-                          { t: "شات ذكاء اصطناعي لكتابة الكود", d: "كتابة صفحة كاملة، جزء محدد من الكود، تعديل الرسائل، وإضافة الكود لمشروع جديد أو قديم." },
-                        ].map((item, i) => (
-                          <li key={i} className="flex gap-3">
-                            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
-                            <div>
-                              <div className="text-[13px] font-bold">{item.t}</div>
-                              <div className="text-[12px] leading-[1.8] text-white/55 mt-1">{item.d}</div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="space-y-5">
-                      <div className="rounded-[14px] border border-[#FF6A00]/15 bg-[#140804]/80 p-5">
-                        <div className="text-[11px] tracking-widest text-white/40">WHAT WE OFFER</div>
-                        <ul className="mt-3 space-y-2">
-                          {[
-                            "لوحة تحكم لإضافة/تعديل/حذف مشروع",
-                            "عرض جميع مشاريعك في مكان واحد",
-                            "شات AI متخصص للكود فقط",
-                            "مشاريع مفضلة تعمل عليها باستمرار",
-                          ].map((t,i) => (
-                            <li key={i} className="flex gap-2 text-[12.5px] text-white/70"><span className="text-[#FF6A00]">✓</span>{t}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
-                        <div className="text-[13px] font-bold mb-3">الروابط الرسمية</div>
-                        <div className="space-y-3">
-                          <a href="https://github.com/boshraKurdi/Cody" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
-                            <span className="flex items-center gap-2 text-[13px] font-bold"><span className="text-[16px]">↗</span> عرض الكود على GitHub</span>
-                            <span className="text-[10px] opacity-80">Cody</span>
-                          </a>
-                          <a href="https://linda-faraj.github.io/cody-poster" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] border border-[#FF6A00]/50 bg-[#0D0502]/40 hover:bg-[#FF6A00]/10 transition">
-                            <span className="flex items-center gap-2 text-[13px] font-bold"><span>◍</span> عرض البوستر</span>
-                            <span className="text-[10px] text-white/50">poster</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ===== MALAZ ===== */}
-              {selectedProject === "malaz" && (
-                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
-                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
-                      <div>
-                        <div className="inline-flex gap-2 mb-4">
-                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">TOURISM</span>
-                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">+10k تحميل</span>
-                        </div>
-                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">ملاذ — دليل الأماكن السياحية</h1>
-                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">تطبيق سياحي متكامل لاكتشاف المطاعم، الحدائق، والأماكن السياحية. خرائط تفاعلية، تصنيفات، حجز فوري، وتجربة عربية دافئة وسريعة.</p>
-                        <div className="mt-6 flex flex-wrap gap-2">
-                          {["Flutter", "Maps", "UI/UX", "Firebase", "Geolocation"].map(t => (
-                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
-                        <img src={malazImage} alt="Malaz" className="w-full h-[320px] object-cover" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
-                    <h2 className="text-[18px] font-bold flex items-center gap-2">
-                      <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" />
-                      الفيديو التوضيحي
-                    </h2>
-                    <div className="mt-6 grid md:grid-cols-2 gap-5">
-                      <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
-                        <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
-                          <span className="text-[12px] font-bold">عرض ملاذ — تجربة المستخدم</span>
-                          <span className="text-[10px] text-white/40">DEMO 1</span>
-                        </div>
-                        <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={malazImage}>
-                          <source src={malazepromoVideo} type="video/mp4" />
-                        </video>
-                      </div>
-                      <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
-                        <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
-                          <span className="text-[12px] font-bold">شرح واجهات ملاذ</span>
-                          <span className="text-[10px] text-white/40">DEMO 2</span>
-                        </div>
-                        <video controls playsInline className="w-full aspect-video object-contain bg-black" poster={malazeVideo}>
-                          <source src={malazeVideo} type="video/mp4" />
-                        </video>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
-                    <div>
-                      <h3 className="text-[16px] font-bold">شرح الواجهات</h3>
-                      <ul className="mt-5 space-y-3">
-                        {[
-                          "شاشة البحث عن الأماكن — بحث سريع مع اقتراحات ذكية.",
-                          "تصنيفات (cafe, restaurant, park) — فلترة بصرية بأيقونات واضحة.",
-                          "تفاصيل المكان مع صور، وصف، ساعات العمل، وقائمة الطعام.",
-                          "خريطة تفاعلية لتحديد الموقع والاتجاهات.",
-                          "تقييمات المستخدمين وتعليقات مع صور فعلية.",
-                          "حجز سريع ومشاركة المكان مع الأصدقاء.",
-                        ].map((t,i) => (
-                          <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
-                            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
-                            <span>{t}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="space-y-5">
-                      <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
-                        <div className="text-[13px] font-bold mb-3">الروابط الرسمية</div>
-                        <div className="space-y-3">
-                          <a href="https://github.com/LINDA-FARAJ/malaze" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)]">
-                            <span className="flex items-center gap-2 text-[13px] font-bold"><span className="text-[16px]">↗</span> عرض الكود على GitHub</span>
-                            <span className="text-[10px] opacity-80">malaze</span>
-                          </a>
-                          <a href="https://github.com/LINDA-FARAJ/malaze" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] border border-[#FF6A00]/50 bg-[#0D0502]/40 hover:bg-[#FF6A00]/10 transition">
-                            <span className="flex items-center gap-2 text-[13px] font-bold"><span>◍</span> عرض البوستر</span>
-                            <span className="text-[10px] text-white/50">poster</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ===== ARABESC ===== */}
-              {selectedProject === "arabesc" && (
-                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
-                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
-                      <div>
-                        <div className="inline-flex gap-2 mb-4">
-                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">RESTAURANT</span>
-                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">WordPress</span>
-                        </div>
-                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Arabesc Restaurant & Cafe</h1>
-                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">موقع WordPress مخصص لـ Arabesc، مطعم سوري في Hachioji، اليابان؛ مصمم ليربط النكهات الشرقية الأصيلة بتجربة رقمية عصرية وسهلة الاستخدام.</p>
-                        <div className="mt-6 flex flex-wrap gap-2">
-                          {["WordPress", "WooCommerce", "Arabic/Japanese", "Online Order"].map(t => (
-                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
-                        <img src={arabescImage} alt="Arabesc" className="w-full h-[320px] object-cover" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
-                    <div>
-                      <h3 className="text-[16px] font-bold">مميزات الموقع</h3>
-                      <ul className="mt-5 space-y-3">
-                        {[
-                          "قائمة طعام ثنائية اللغة (ياباني/إنجليزي) مع صور احترافية.",
-                          "نظام طلبات داخلي Store Order مع سلة مشتريات.",
-                          "تصميم مستوحى من رمضان والزخرفة العربية الأصيلة.",
-                          "متجاوب بالكامل مع دعم اللغة اليابانية RTL.",
-                          "تكامل مع WooCommerce لإدارة الطلبات.",
-                          "أزرار تواصل سريع وخرائط Google.",
-                        ].map((t,i) => (
-                          <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
-                            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
-                            <span>{t}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="space-y-5">
-                      <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
-                        <div className="text-[13px] font-bold mb-3">رابط المشروع</div>
-                        <a href="https://arabesc.jp/en/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
-                          <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الموقع المباشر</span>
-                          <span className="text-[10px] opacity-80">LIVE</span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ===== JAPANESE ACADEMY ===== */}
-              {selectedProject === "japanese-academy" && (
-                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
-                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
-                      <div>
-                        <div className="inline-flex gap-2 mb-4">
-                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">EDUCATION</span>
-                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">React Platform</span>
-                        </div>
-                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Japanese Academy</h1>
-                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">منصة تعليمية شاملة لـ Japanese Academy تركز على UI/UX نظيف ومنظم لتحسين تجربة تعلم اللغة أونلاين وتسهيل وصول الطلاب للموارد.</p>
-                        <div className="mt-6 flex flex-wrap gap-2">
-                          {["React", "Zod", "React-Hook-Form", "Animate.css", "Bootstrap", "TypeScript"].map(t => (
-                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
-                        <img src={japaneseAcademyImage} alt="Japanese Academy" className="w-full h-[320px] object-cover" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
-                    <div>
-                      <h3 className="text-[16px] font-bold">مميزات المنصة</h3>
-                      <ul className="mt-5 space-y-3">
-                        {[
-                          "لوحة مواد دراسية ومستويات دراسية منظمة.",
-                          "نظام آراء الطلاب والأسئلة الشائعة.",
-                          "واجهة عربية بالكامل مع دعم RTL.",
-                          "نماذج تسجيل دخول مع React-Hook-Form + Zod Validation.",
-                          "أنيميشن ناعم بـ Animate.css لتحسين التجربة.",
-                          "تصميم متجاوب Bootstrap مع TypeScript للأمان.",
-                        ].map((t,i) => (
-                          <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
-                            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
-                            <span>{t}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="space-y-5">
-                      <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
-                        <div className="text-[13px] font-bold mb-3">رابط المشروع</div>
-                        <a href="https://japaneseacademy.jp/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
-                          <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الموقع المباشر</span>
-                          <span className="text-[10px] opacity-80">LIVE</span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ===== SILK ROAD ===== */}
-              {selectedProject === "silk-road" && (
-                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
-                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
-                      <div>
-                        <div className="inline-flex gap-2 mb-4">
-                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">HOTEL BOOKING</span>
-                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">Laravel • React</span>
-                        </div>
-                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">Silk Road Lodge</h1>
-                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">منصة حجز فندقي أنيقة في قلب تدمر التاريخي. محتوى متعدد اللغات، تصميم CSS مخصص، وتدفق حجز بديهي يمزج التراث بالضيافة العصرية. (قيد التطوير)</p>
-                        <div className="mt-6 flex flex-wrap gap-2">
-                          {["React", "i18next", "Tailwind CSS", "Laravel", "React-Query"].map(t => (
-                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
-                        <img src={silkRoadImage} alt="Silk Road Lodge" className="w-full h-[320px] object-cover" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid md:grid-cols-[1.2fr_0.8fr] gap-10">
-                    <div>
-                      <h3 className="text-[16px] font-bold">مميزات المنصة</h3>
-                      <ul className="mt-5 space-y-3">
-                        {[
-                          "نظام حجز غرف متكامل مع تقويم توفر.",
-                          "دعم تعدد اللغات i18next (EN/AR).",
-                          "تصميم تراثي يعكس روح طريق الحرير في تدمر.",
-                          "لوحة تحكم Laravel لإدارة الغرف والحجوزات.",
-                          "React-Query لإدارة البيانات وسرعة التحميل.",
-                          "تجربة حجز بثلاث خطوات بسيطة وسلسة.",
-                        ].map((t,i) => (
-                          <li key={i} className="flex gap-3 text-[13px] leading-[1.8] text-white/70">
-                            <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] flex-shrink-0" />
-                            <span>{t}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="space-y-5">
-                      <div className="rounded-[14px] border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
-                        <div className="text-[13px] font-bold mb-3">رابط المشروع</div>
-                        <a href="https://silkroadlodge.com/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
-                          <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الموقع المباشر</span>
-                          <span className="text-[10px] opacity-80">LIVE</span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ===== FOR SYRIA SAFETY ===== */}
-              {selectedProject === "for-syria-safety" && (
-                <div className="rounded-[16px] border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
-                    <div className="relative grid md:grid-cols-[1.2fr_0.8fr] gap-8 p-8 md:p-10">
-                      <div>
-                        <div className="inline-flex gap-2 mb-4">
-                          <span className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-[11px] font-bold">HUMANITARIAN</span>
-                          <span className="px-3 py-1 rounded-full bg-[#FF6A00] text-[11px] font-bold">React • Laravel</span>
-                        </div>
-                        <h1 className="text-[28px] md:text-[44px] font-[800] leading-[1.1]">For Syria Safety</h1>
-                        <p className="mt-4 text-[14px] md:text-[16px] text-white/60 leading-[1.9]">منصة إنسانية تهدف لمساعدة السوريين عبر رفع الوعي وكشف الألغام والقنابل غير المنفجرة. تبليغ، تتبع، وموارد تعليمية لسلامة المجتمع.</p>
-                        <div className="mt-6 flex flex-wrap gap-2">
-                          {["React", "Laravel", "Redux Toolkit", "TypeScript"].map(t => (
-                            <span key={t} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-[12px]">{t}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="rounded-[16px] overflow-hidden border border-[#FF6A00]/20 bg-[#150800]/80 shadow-[0_0_30px_rgba(255,106,0,0.2)]">
-                        <img src={forSyriaSafetyImage} alt="For Syria Safety" className="w-full h-[320px] object-cover" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-6 md:p-10 border-t border-[#FF6A00]/10">
-                    <h2 className="text-[18px] font-bold flex items-center gap-2">
-                      <span className="w-1.5 h-6 rounded-full bg-gradient-to-b from-[#FF0000] to-[#FF6A00] inline-block" /> الفيديو التوضيحي
-                    </h2>
-                    <div className="mt-6 grid md:grid-cols-2 gap-5">
-                      <div className="rounded-[14px] overflow-hidden border border-[#FF6A00]/20 bg-black shadow-[0_0_30px_rgba(255,106,0,0.18)]">
-                        <div className="px-4 py-2.5 bg-[#0D0502]/80 border-b border-[#FF6A00]/10 flex items-center justify-between">
-                          <span className="text-[12px] font-bold">عرض المنصة — فيديو توضيحي</span>
-                          <span className="text-[10px] text-white/40">DEMO</span>
-                        </div>
-                        <iframe className="w-full aspect-video bg-black" src="https://www.youtube.com/embed/izCklNw_P4I" title="For Syria Safety Demo" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                      </div>
-                      <div className="rounded-[14px] border border-[#FF6A00]/15 bg-[#140804]/80 p-5 flex flex-col justify-center">
-                        <div className="text-[11px] tracking-widest text-white/40">KEY FEATURES</div>
-                        <ul className="mt-3 space-y-2">
-                          {[
-                            "تبليغ عن ألغام مشبوهة مع موقع GPS وصور.",
-                            "تتبع فرق الإزالة وحالة المناطق.",
-                            "موارد تعليمية لسلامة الأطفال والمجتمع.",
-                            "لوحة تحكم للمسؤولين والمتطوعين.",
-                          ].map((t,i) => (
-                            <li key={i} className="flex gap-2 text-[12.5px] text-white/70"><span className="text-[#FF6A00]">✓</span>{t}</li>
-                          ))}
-                        </ul>
-                        <div className="mt-6 space-y-3">
-                          <a href="https://github.com/SaraAlsukary/for-syria-" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
-                            <span className="flex items-center gap-2 text-[13px] font-bold">↗ عرض الكود على GitHub</span>
-                            <span className="text-[10px] opacity-80">for-syria</span>
-                          </a>
-                          <a href="https://youtu.be/izCklNw_P4I?si=L29W9PrPnFxevCGAsafety" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-[12px] border border-[#FF6A00]/50 bg-[#0D0502]/40 hover:bg-[#FF6A00]/10 transition">
-                            <span className="flex items-center gap-2 text-[13px] font-bold">◍ مشاهدة على يوتيوب</span>
-                            <span className="text-[10px] text-white/50">YouTube</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="mt-8 flex justify-center">
-                <button onClick={() => setSelectedProject(null)} className="px-6 py-2.5 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] transition text-[13px] cursor-pointer">إغلاق التفاصيل</button>
-              </div>
-              <div className="h-[40px]" />
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ===== FOOTER ===== */}
       <footer className="relative z-20 bg-[#0D0502] border-t border-[#FF6A00]/10 px-6 md:px-[80px] py-[56px]">
@@ -1673,5 +2253,19 @@ export default function App() {
         </div>
       </footer>
     </div>
+  );
+
+}
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/weloze-pheonix/" element={<Home />} />
+
+        <Route path="/project/:id" element={<ProjectPage />} />
+        <Route path="/weloze-pheonix/project/:id" element={<ProjectPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
