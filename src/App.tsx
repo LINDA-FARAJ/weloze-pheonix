@@ -15,6 +15,7 @@ import silkRoadImage from "./assets/20.png";
 import forSyriaSafetyImage from "./assets/8.png";
 import fashionImage from "./assets/fashon.jpg";
 import bannanImage from "./assets/bannan.jpg";
+import zanaImage from "./assets/zana-platform.png";
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
@@ -49,7 +50,6 @@ const FadeIn: React.FC<{ children: React.ReactNode; delay?: number; className?: 
 };
 const projects = [
   {
-      
     id: "fashion-one",
     title: "Fashion One | منصة الموضة",
     desc: "منصة سوق إلكتروني حديثة تُعيد تعريف تجربة تسوق الأزياء من خلال الربط بين المبدعين والمصممين المستقلين والمتاجر المميزة في مساحة واحدة.",
@@ -57,6 +57,15 @@ const projects = [
     tag: "E-commerce • Next.js",
     tech: ["Next.js", "Tailwind", "Vercel"],
     meta: "متعدد البائعين • Responsive",
+  },
+  {
+    id: "zana",
+    title: "Zana | منصة زانا التعليمية",
+    desc: "منصة تعليمية تفاعلية لطلاب المرحلتين الابتدائية والإعدادية، تجمع الخرائط الذهنية والمحاكاة والجولات الافتراضية في تجربة تعليمية واحدة.",
+    image: zanaImage,
+    tag: "EdTech • VR • Interactive Learning",
+    tech: ["EdTech", "Virtual Reality", "Mind Maps", "Simulation"],
+    meta: "ابتدائي وإعدادي • تعلّم تفاعلي",
   },
   {
     id: "bannan",
@@ -198,6 +207,85 @@ function ProjectPage() {
                   <span className="flex items-center gap-2 text- font-bold">↗ عرض الموقع المباشر</span>
                   <span className="text- opacity-80">LIVE</span>
                 </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===== ZANA EDUCATIONAL PLATFORM ===== */}
+      {id === "zana" && (
+        <div dir="rtl" className="rounded-2xl border border-[#FF6A00]/20 bg-[#0D0502]/95 overflow-hidden shadow-[0_0_80px_rgba(255,106,0,0.15)]">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF6A00]/20 via-[#D00000]/10 to-transparent" />
+            <div className="relative grid md:grid-cols-[1.1fr_0.9fr] gap-8 p-6 md:p-10 items-center">
+              <div>
+                <div className="inline-flex flex-wrap gap-2 mb-4">
+                  {["EdTech", "Virtual Reality", "Interactive Learning"].map((tag) => (
+                    <span key={tag} className="px-3 py-1 rounded-full bg-[#0D0502]/60 border border-[#FF6A00]/30 text-xs font-bold text-[#FFB347]">{tag}</span>
+                  ))}
+                </div>
+                <h2 className="text-2xl md:text-4xl font-extrabold leading-tight">زانا — تعلّم يتجاوز حدود الصف</h2>
+                <p className="mt-4 text-sm md:text-base text-white/70 leading-[1.9]">
+                  منصة تعليمية حديثة لطلاب المرحلتين الابتدائية والإعدادية، تطوّر تجربة التعلّم من خلال الخرائط الذهنية التفاعلية، والجولات الافتراضية ثلاثية الأبعاد، وبيئات المحاكاة التعليمية؛ لتجمع المعرفة بالاستكشاف والتجربة العملية.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Mind Maps", "Science Simulation", "3D Virtual Tours", "المرحلة الابتدائية", "المرحلة الإعدادية"].map((tag) => (
+                    <span key={tag} className="px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/10 text-xs text-white/80">{tag}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="overflow-hidden rounded-xl border border-[#FF6A00]/20 bg-white shadow-[0_0_30px_rgba(255,106,0,0.2)]">
+                <img src={zanaImage} alt="الصفحة الرئيسية لمنصة زانا التعليمية" className="w-full aspect-[16/10] object-cover object-top" />
+              </div>
+            </div>
+          </div>
+          <div className="p-6 md:p-10 border-t border-[#FF6A00]/10 grid lg:grid-cols-[1.2fr_0.8fr] gap-10">
+            <div>
+              <h3 className="text-xl font-bold">واجهات وتجارب المنصة</h3>
+              <div className="mt-5 grid sm:grid-cols-2 gap-3">
+                {[
+                  { title: "الصفحة الرئيسية", desc: "واجهة ترحيبية تعرّف برسالة زانا وأساليب التعلّم وتوفر وصولًا سريعًا للمراحل والخدمات." },
+                  { title: "المراحل التعليمية", desc: "اختيار المرحلة الابتدائية من الصف الأول إلى السادس أو الإعدادية من الصف السابع إلى التاسع." },
+                  { title: "المواد الدراسية", desc: "مواد منظمة حسب المرحلة والصف، تشمل العربية والرياضيات والعلوم واللغات والدراسات الاجتماعية." },
+                  { title: "أساليب التعلّم", desc: "خرائط ذهنية ومحاكاة علمية وجولات افتراضية لاختيار التجربة المناسبة لكل درس." },
+                  { title: "الخدمات التعليمية", desc: "عرض طرق توظيف التقنيات التفاعلية لتبسيط الدروس وربط المفاهيم." },
+                  { title: "من نحن", desc: "التعريف برؤية زانا في دعم الفهم والاستكشاف والتعلّم النشط." },
+                ].map((item) => (
+                  <div key={item.title} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                    <h4 className="font-bold text-[#FFB347]">{item.title}</h4>
+                    <p className="mt-2 text-sm leading-7 text-white/60">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+              <h3 className="mt-8 text-xl font-bold">مميزات المنصة</h3>
+              <ul className="mt-4 space-y-3">
+                {[
+                  "تنظيم المحتوى التعليمي حسب المرحلة والصف والمادة الدراسية.",
+                  "خرائط ذهنية تساعد على تنظيم المعلومات وربط المفاهيم.",
+                  "محاكاة تفاعلية لاستكشاف التجارب والمفاهيم العلمية.",
+                  "جولات افتراضية تعليمية بتقنيات الواقع الافتراضي.",
+                  "واجهات جذابة وانتقالات سلسة وتنقل واضح بين المحتوى.",
+                  "قابلية التوسع لإضافة دروس وتجارب وروابط تعليمية جديدة.",
+                ].map((feature) => (
+                  <li key={feature} className="flex gap-3 text-sm leading-7 text-white/70">
+                    <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#FF6A00] shadow-[0_0_8px_#FF6A00] shrink-0" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-5">
+              <div className="rounded-xl border border-[#FF6A00]/20 bg-gradient-to-br from-[#1A0A05] to-[#0D0502] p-5">
+                <div className="text-lg font-bold mb-3">الموقع الإلكتروني</div>
+                <a href="https://zana-platform-xi.vercel.app/" target="_blank" rel="noreferrer" className="flex items-center justify-between gap-3 w-full px-4 py-3 rounded-lg bg-gradient-to-r from-[#D00000] to-[#FF6A00] shadow-[0_0_22px_rgba(255,106,0,0.35)] hover:brightness-110 transition">
+                  <span className="flex items-center gap-2 font-bold">↗ زيارة منصة زانا</span>
+                  <span className="text-xs opacity-80">LIVE</span>
+                </a>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+                <div className="text-lg font-bold mb-3">الفئة المستهدفة</div>
+                <p className="text-sm leading-7 text-white/60">طلاب المرحلة الابتدائية والمرحلة الإعدادية، من الصف الأول حتى الصف التاسع.</p>
               </div>
             </div>
           </div>
@@ -699,16 +787,15 @@ function Home() {
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
-    if (location.state?.scrollTo === "works") {
-      setTimeout(() => {
+    if (location.state?.scrollTo === "works" || location.hash === "#works") {
+      const timeout = window.setTimeout(() => {
         document.getElementById("works")?.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
-
-        // تنظيف state حتى لا يعيد الـ scroll عند refresh
-        window.history.replaceState({}, document.title);
       }, 100);
+
+      return () => window.clearTimeout(timeout);
     }
   }, [location]);
   useEffect(() => {
@@ -2258,13 +2345,10 @@ function Home() {
 }
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/weloze-pheonix">
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/weloze-pheonix/" element={<Home />} />
-
         <Route path="/project/:id" element={<ProjectPage />} />
-        <Route path="/weloze-pheonix/project/:id" element={<ProjectPage />} />
       </Routes>
     </BrowserRouter>
   );
