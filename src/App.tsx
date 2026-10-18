@@ -2345,8 +2345,15 @@ function Home() {
 
 }
 export default function App() {
+  const projectBasePath = "/weloze-pheonix";
+  const pathname = window.location.pathname;
+  const basename =
+    pathname === projectBasePath || pathname.startsWith(`${projectBasePath}/`)
+      ? projectBasePath
+      : undefined;
+
   return (
-    <BrowserRouter basename="/weloze-pheonix">
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/project/:id" element={<ProjectPage />} />
